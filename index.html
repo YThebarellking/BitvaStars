@@ -1,0 +1,238 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор силы - Битва Старр</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
+    color: #e6e6e6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 16px;
+}
+
+/* Контейнер */
+.container {
+    width: 100%;
+    max-width: 420px;
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    animation: appear 0.5s ease;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    text-align: center;
+    margin: 0 0 16px;
+    font-size: 1.4rem;
+}
+
+/* Лейблы */
+label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+/* Инпуты */
+input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    background: #2a2a2a;
+    color: #fff;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* Кнопки */
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ffffff, #e6e6e6);
+    color: #111;
+    transition: 0.2s;
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Результат */
+.result {
+    margin-top: 16px;
+    background: #262626;
+    padding: 12px;
+    border-radius: 12px;
+    max-height: 260px;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Строки */
+.line {
+    display: block;
+    padding: 6px 8px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+    transition: 0.2s;
+}
+
+/* Hover эффект */
+.line:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateX(6px);
+}
+
+/* Подсветка выбранной силы */
+.highlight {
+    background: #ffffff;
+    color: #111;
+    box-shadow: 0 0 14px rgba(255,255,255,0.9);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%   { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    50%  { box-shadow: 0 0 16px rgba(255,255,255,1); }
+    100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+}
+
+/* Кнопка копирования */
+.copy-success {
+    background: linear-gradient(135deg, #ffffff, #f5f5f5) !important;
+    color: #111 !important;
+}
+
+/* Для маленьких экранов */
+@media (max-width: 360px) {
+    h2 { font-size: 1.25rem; }
+    input, button { font-size: 0.95rem; padding: 12px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Калькулятор силы - Битва Старр</h2>
+
+    <label>HP на уровне:</label>
+    <input type="number" id="hp" placeholder="Например: 5600">
+
+    <label>Урон на уровне:</label>
+    <input type="number" id="dmg" placeholder="Например: 800">
+
+    <label>Уровень силы (1–11):</label>
+    <input type="number" id="lvl" min="1" max="11" placeholder="Например: 11">
+
+    <button onclick="calculate()">Рассчитать</button>
+
+    <div id="result" class="result"></div>
+
+    <button id="copyBtn" onclick="copyResult()" style="display:none">
+        Скопировать результат
+    </button>
+</div>
+
+<script>
+const hpInput = document.getElementById("hp");
+const dmgInput = document.getElementById("dmg");
+const lvlInput = document.getElementById("lvl");
+const result = document.getElementById("result");
+const copyBtn = document.getElementById("copyBtn");
+
+function calculate() {
+    const hp = +hpInput.value;
+    const dmg = +dmgInput.value;
+    const lvl = +lvlInput.value;
+
+    if (!hp || !dmg || lvl < 1 || lvl > 11) {
+        result.innerHTML = "Введите корректные данные";
+        copyBtn.style.display = "none";
+        return;
+    }
+
+    const multCurrent = 0.5 + (lvl - 1) * 0.05;
+    const hp11 = hp / multCurrent;
+    const dmg11 = dmg / multCurrent;
+
+    let html = "";
+    for (let i = 1; i <= 11; i++) {
+        const mult = 0.5 + (i - 1) * 0.05;
+        const h = Math.round(hp11 * mult);
+        const d = Math.round(dmg11 * mult);
+
+        html += `<span class="line ${i === lvl ? "highlight" : ""}">
+            ${i} сила — ${h} HP / ${d} урона
+        </span>`;
+    }
+
+    result.innerHTML = html;
+    copyBtn.style.display = "block";
+}
+
+function copyResult() {
+    const text = result.innerText;
+
+    // Надежный способ для телефонов
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.style.position = "fixed";
+    textarea.style.opacity = "0";
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    try {
+        document.execCommand("copy");
+        copyBtn.textContent = "Результат скопирован!";
+        copyBtn.classList.add("copy-success");
+        setTimeout(() => {
+            copyBtn.textContent = "Скопировать результат";
+            copyBtn.classList.remove("copy-success");
+        }, 1000);
+    } catch (e) {
+        alert("Не удалось скопировать 😢");
+    }
+
+    document.body.removeChild(textarea);
+}
+</script>
+
+</body>
+</html>
