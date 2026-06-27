@@ -18,12 +18,12 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
-            padding: 16px;
+            padding: 30px;
         }
 
         .container {
             width: 100%;
-            max-width: 720px;
+            max-width: 770px;
             background: #1e1e1e;
             padding: 20px;
             border-radius: 18px;
@@ -571,6 +571,7 @@
                 <ul>
                     <li>• Ссылка на игру: <a href="https://yandex.ru/games/app/387326" target="_blank">https://yandex.ru/games/app/387326</a></li>
                     <li>• Бета-версия игры: <a href="https://yandex.ru/games/app/387326?draft=true" target="_blank">https://yandex.ru/games/app/387326?draft=true</a></li>
+                    <li>• Телеграмм канал разработчика: <a href="https://t.me/brawlstarryndx" target="_blank">https://t.me/brawlstarryndx</a></li>
                 </ul>
             </div>
             <div class="info-block">
@@ -686,7 +687,7 @@
             id: 1,
             name: "Шелли",
             rarity: "Обычный",
-            info: "Редкость: Обычный\nСпособ получения: Начальный\nГаджет: Есть\nКол. скинов: \nАтака: Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.\nСупер: Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.\nГаджет: Стрельба по тарелкам —  увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
+            info: "Редкость: Обычный\nСпособ получения: Начальный\nГаджет: Есть\nКол. скинов: \nАтака: Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.\nСупер: Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.\nГаджет: Стрельба по тарелкам - увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
             stats: "1 - 2800 / 400\n2 - 3080 / 440\n3 - 3360 / 480\n4 - 3640 / 520\n5 - 3920 / 560\n6 - 4200 / 600\n7 - 4480 / 640\n8 - 4760 / 680\n9 - 5040 / 720\n10 - 5320 / 760\n11 - 5600 / 800",
             build: "Рекомендуемый уровень: 8\nНужен гаджет: Да\nСнаряжение: +1 жизнь, урон\nГиперзаряд: Полезен ",
             howto: "- Старйтесь играть от кустов и на закрытых картах\n- Не тратьте супер впустую\n- Используйте гаджет, чтобы добить врага на большой дистанции",
@@ -880,7 +881,7 @@
                 const h = Math.round(hp11 * mult);
                 const d = Math.round(dmg11 * mult);
                 const cls = i === lvl ? "line highlight" : "line";
-                html += `<span class="${cls}">${i} сила — ${h} HP / ${d} урона</span>`;
+                html += `<span class="${cls}">${i} сила - ${h} HP / ${d} урона</span>`;
             }
             result.innerHTML = html;
             copyBtn.style.display = "block";
