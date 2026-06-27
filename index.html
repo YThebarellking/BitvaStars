@@ -77,11 +77,22 @@
 
         .tab-content {
             display: none;
-            animation: fadeIn 0.3s ease;
         }
 
         .tab-content.active {
             display: block;
+            animation: slideFade .35s ease;
+        }
+
+        @keyframes slideFade {
+            from {
+                opacity: 0;
+                transform: translateX(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @keyframes fadeIn {
@@ -188,12 +199,12 @@
             font-size: 1.4rem;
         }
 
-        /* Управление (поиск + сортировка) */
+        /* Управление (поиск + сортировка + фильтры) */
         .controls {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-bottom: 16px;
-            flex-wrap: wrap;
         }
 
         .controls input,
@@ -223,6 +234,45 @@
             color: #fff;
         }
 
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 12px;
+            background: #262626;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .filter-group .filter-label {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid #555;
+            border-radius: 6px;
+            color: #ccc;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+        }
+
+        .filter-btn:hover {
+            background: #333;
+            border-color: #aaa;
+        }
+
+        .filter-btn.active {
+            background: #fff;
+            color: #111;
+            border-color: #fff;
+        }
+
         .brawlers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -243,6 +293,7 @@
             align-items: center;
             border: 2px solid transparent;
             font-weight: 600;
+            position: relative;
         }
 
         .brawler-card:hover {
@@ -263,6 +314,25 @@
             background: rgba(0, 0, 0, 0.4);
             padding: 2px 8px;
             border-radius: 12px;
+        }
+
+        .brawler-card .meta-icons {
+            font-size: 0.7rem;
+            margin-top: 6px;
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .brawler-card .meta-icons span {
+            background: rgba(0,0,0,0.3);
+            padding: 0 6px;
+            border-radius: 10px;
+        }
+
+        .brawler-card .difficulty-stars {
+            color: #f1c40f;
         }
 
         /* ----- Цвета редкости ----- */
@@ -320,7 +390,6 @@
             display: block;
         }
 
-        /* Улучшенная кнопка назад */
         .viewer-panel .back-btn {
             display: inline-flex;
             align-items: center;
@@ -385,6 +454,16 @@
             color: #ddd;
         }
 
+        .viewer-panel .section-content a {
+            color: #8ab4f8;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .viewer-panel .section-content a:hover {
+            color: #fff;
+        }
+
         .empty-state {
             text-align: center;
             padding: 40px 0;
@@ -442,7 +521,19 @@
             .controls select {
                 min-width: 100%;
             }
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
+        .viewer-panel .section-content a {
+           color: #8ab4f8;
+           text-decoration: underline;
+           cursor: pointer;
+       }
+       .viewer-panel .section-content a:hover {
+           color: #ffffff;
+       }
     </style>
 </head>
 <body>
@@ -468,12 +559,12 @@
                 <ul>
                     <li>• 74 бойца</li>
                     <li>• 95 иконок</li>
-                    <li>• 49 скинов</li>
+                    <li>• 54 скина</li>
                     <li>• 20 гаджетов</li>
                     <li>• 12 режимов</li>
                     <li>• 1.000.000+ игроков посетивших игру</li>
                     <li>• 25 выпущенных обновлений</li>
-                    <li>• Только 6 игроков, достигшив 1м трофеев</li>
+                    <li>• Только 7 игроков, достигшив 1м трофеев</li>
                 </ul>
             </div>
             <div class="info-block">
@@ -484,7 +575,7 @@
                 </ul>
             </div>
             <div class="info-block">
-                <h3>Сайт сделан каналом <a href="https://t.me/BitvaStarrNews" target="_blank">https://t.me/BitvaStarrNews</a></li></h3>
+                <h3>Сайт сделан каналом <a href="https://t.me/BitvaStarrNews" target="_blank">https://t.me/BitvaStarrNews</a></h3>
             </div>
         </div>
 
@@ -522,7 +613,23 @@
                     <select id="sortSelect">
                         <option value="rarity">По редкости</option>
                         <option value="order">По добавлению</option>
+                        <option value="difficulty">По сложности</option>
+                        <option value="worth">Стоит апать (сначала Да)</option>
                     </select>
+                </div>
+
+                <!-- Фильтры -->
+                <div class="filter-group">
+                    <span class="filter-label">Гаджет:</span>
+                    <button class="filter-btn active" data-filter="gadget" data-value="all">➖ Все</button>
+                    <button class="filter-btn" data-filter="gadget" data-value="yes">✅ Есть</button>
+                    <button class="filter-btn" data-filter="gadget" data-value="no">❌ Нет</button>
+
+                    <span class="filter-label" style="margin-left:12px;">Стоит апать:</span>
+                    <button class="filter-btn active" data-filter="worth" data-value="all">➖ Все</button>
+                    <button class="filter-btn" data-filter="worth" data-value="Да">✅ Да</button>
+                    <button class="filter-btn" data-filter="worth" data-value="Нет">❌ Нет</button>
+                    <button class="filter-btn" data-filter="worth" data-value="Возможно">❓ Возможно</button>
                 </div>
 
                 <div id="brawlersGrid" class="brawlers-grid"></div>
@@ -574,81 +681,69 @@
 
     <script>
         // ============================================================
-        //  НАЧАЛЬНЫЕ ДАННЫЕ БОЙЦОВ (жёстко заданы в коде)
-        //  Добавляйте новых бойцов, копируя объект в массив ниже.
-        //  Все изменения только здесь – на сайте редактирование отключено.
-        //  Доступные редкости: Обычный, Редкий, Суперредкий, Эпический,
-        //  Мифический, Легендарный, Ультралегендарный, Временная.
+        //  НАЧАЛЬНЫЕ ДАННЫЕ БОЙЦОВ (с новыми полями)
         // ============================================================
         const defaultBrawlers = [{
             id: 1,
             name: "Шелли",
             rarity: "Обычный",
-            info: "Редкость: Обычный\nСпособ получения: Начальный\nГаджет: Есть\nКол. скинов: 1\nАтака: Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.\nСупер: Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.\nГаджет: Стрельба по тарелкам —  увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
+            info: "Редкость: Обычный\nСпособ получения: Начальный\nГаджет: Есть\nКол. скинов: \nАтака: Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.\nСупер: Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.\nГаджет: Стрельба по тарелкам —  увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
             stats: "1 - 2800 / 400\n2 - 3080 / 440\n3 - 3360 / 480\n4 - 3640 / 520\n5 - 3920 / 560\n6 - 4200 / 600\n7 - 4480 / 640\n8 - 4760 / 680\n9 - 5040 / 720\n10 - 5320 / 760\n11 - 5600 / 800",
-            build: "Рекомендуемый уровень: 11\nГаджет: Да, для контроля\nСнаряжение: Щит, Ускорение\nГиперзаряд: 🔥",
-            howto: "- Держите дистанцию\n- Не тратьте супер впустую\n- Используйте гаджет для отхода",
-            matchups: "Хорош против: Танки, Ассасины\nПлох против: Дальнобойные, Контроллеры",
-            modes: "🥇 - Бравлбол\n🥈 - Ограбление\n🥉 - Выживание",
-            verdict: "Моё мнение: Отличный стартовый боец\nСложность: 5/10\nСтоит апать?: Да"
+            build: "Рекомендуемый уровень: 8\nГаджет: Да\nСнаряжение: Щит, урон\nГиперзаряд: Полезен ",
+            howto: "- Старйтесь играть от кустов и на закрытых картах\n- Не тратьте супер впустую\n- Используйте гаджет чтобы добить врага на большой дистанции",
+            matchups: "Хорош против: Танк (Такие как Булл, Роза)\nПлох против: Контроль, Метатели (Такие как Гром, Брали или Тара)",
+            modes: "🥇 - Столкновение\n🥈 - Броулбол\n🥉 - Дуэли",
+            verdict: "Моё мнение: Отличный стартовый боец\nСложность: /10\nСтоит апать?: ",
+            // Новые поля
+            hasGadget: true,
+            skinCount: 1,
+            difficulty: 5,
+            worthUpgrading: "Возможно"
+        // }, {
         }, {
             id: 2,
-            name: "Кольт",
-            rarity: "Редкий",
-            info: "Редкость: Редкий\nСпособ получения: Трофеи\nГаджет: Есть\nКол. скинов: 6\nАтака: 400\nСупер: 800\nГаджет: 300 (Перезарядка 12 сек)",
-            stats: "1 — 900 / 90\n2 — 1000 / 100\n3 — 1100 / 110",
-            build: "Рекомендуемый уровень: 10\nГаджет: Да, для урона\nСнаряжение: Скорость, Урон\nГиперзаряд: 🤔",
-            howto: "- Стреляйте очередями\n- Используйте супер для контроля\n- Не подходите близко",
-            matchups: "Хорош против: Танки, Ближники\nПлох против: Ассасины, Снайперы",
-            modes: "🥇 - Ограбление\n🥈 - Бравлбол\n🥉 - Выживание",
-            verdict: "Моё мнение: Хорош на дальних дистанциях\nСложность: 6/10\nСтоит апать?: Да"
-        }, {
-            id: 3,
-            name: "Спайк",
-            rarity: "Легендарный",
-            info: "Редкость: Легендарный\nСпособ получения: Ящики\nГаджет: Есть\nКол. скинов: 4\nАтака: 500\nСупер: 900\nГаджет: 400 (Перезарядка 8 сек)",
-            stats: "1 — 800 / 80\n2 — 900 / 90\n3 — 1000 / 100",
-            build: "Рекомендуемый уровень: 11\nГаджет: Да, для контроля зоны\nСнаряжение: Щит, Урон\nГиперзаряд: 🔥",
-            howto: "- Используйте супер для замедления\n- Атакуйте из-за укрытий",
-            matchups: "Хорош против: Танки, Ассасины\nПлох против: Снайперы, Контроллеры",
-            modes: "🥇 - Бравлбол\n🥈 - Ограбление\n🥉 - Выживание",
-            verdict: "Моё мнение: Один из лучших\nСложность: 7/10\nСтоит апать?: Да"
-        }, {
-            id: 4,
-            name: "Сёрдж",
+            name: "Булл",
             rarity: "Ультралегендарный",
-            info: "Редкость: Ультралегендарный\nСпособ получения: Бравл-пасс\nГаджет: Есть\nКол. скинов: 3\nАтака: 350\nСупер: 500\nГаджет: 250 (Перезарядка 9 сек)",
-            stats: "1 — 850 / 85\n2 — 950 / 95\n3 — 1050 / 105",
-            build: "Рекомендуемый уровень: 11\nГаджет: Да, для усиления\nСнаряжение: Скорость, Урон\nГиперзаряд: 🔥",
-            howto: "- Заряжайте супер\n- Используйте ульту для преодоления препятствий",
-            matchups: "Хорош против: Ближники, Танки\nПлох против: Дальнобойные, Контроллеры",
-            modes: "🥇 - Бравлбол\n🥈 - Ограбление\n🥉 - Выживание",
-            verdict: "Моё мнение: Очень сильный, но сложный\nСложность: 8/10\nСтоит апать?: Да"
-        }, {
-            id: 5,
-            name: "Базз",
-            rarity: "Временный",
-            info: "Редкость: Временная (сезонная)\nСпособ получения: Событие\nГаджет: Есть\nКол. скинов: 2\nАтака: 320\nСупер: 480\nГаджет: 280 (Перезарядка 7 сек)",
-            stats: "1 — 920 / 92\n2 — 1020 / 102\n3 — 1120 / 112",
-            build: "Рекомендуемый уровень: 9\nГаджет: Да, для мобильности\nСнаряжение: Ускорение, Щит\nГиперзаряд: 🤔",
-            howto: "- Используйте супер для рывка\n- Атакуйте в ближнем бою",
-            matchups: "Хорош против: Ассасины, Снайперы\nПлох против: Танки, Контроллеры",
-            modes: "🥇 - Выживание\n🥈 - Бравлбол\n🥉 - Ограбление",
-            verdict: "Моё мнение: Интересный, но не везде\nСложность: 6/10\nСтоит апать?: Возможно"
+            info: "Редкость: Обычный\nСпособ получения: Начальный\nГаджет: Есть\nКол. скинов: \nАтака: Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.\nСупер: Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.\nГаджет: Стрельба по тарелкам —  увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
+            stats: "1 - 2800 / 400\n2 - 3080 / 440\n3 - 3360 / 480\n4 - 3640 / 520\n5 - 3920 / 560\n6 - 4200 / 600\n7 - 4480 / 640\n8 - 4760 / 680\n9 - 5040 / 720\n10 - 5320 / 760\n11 - 5600 / 800",
+            build: "Рекомендуемый уровень: 8\nГаджет: Да\nСнаряжение: Щит, урон\nГиперзаряд: Полезен ",
+            howto: "- Старйтесь играть от кустов и на закрытых картах\n- Не тратьте супер впустую\n- Используйте гаджет чтобы добить врага на большой дистанции",
+            matchups: "Хорош против: Танк (Такие как Булл, Роза)\nПлох против: Контроль, Метатели (Такие как Гром, Брали или Тара)",
+            modes: "🥇 - Столкновение\n🥈 - Броулбол\n🥉 - Дуэли",
+            verdict: "Моё мнение: Отличный стартовый боец\nСложность: /10\nСтоит апать?: ",
+            // Новые поля
+            hasGadget: true,
+            skinCount: 100,
+            difficulty: 3,
+            worthUpgrading: "Нет"
         }];
 
         // ===== Инициализация =====
         let brawlers = defaultBrawlers;
+
+        // Состояния фильтров
+        let filters = {
+            gadget: 'all',   // 'all', 'yes', 'no'
+            worth: 'all'     // 'all', 'Да', 'Нет', 'Возможно'
+        };
 
         // Получить отфильтрованный и отсортированный список
         function getFilteredBrawlers() {
             const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
             const sortBy = document.getElementById('sortSelect').value;
 
-            let filtered = brawlers.filter(b => b.name.toLowerCase().includes(searchTerm));
+            let filtered = brawlers.filter(b => {
+                // Поиск по имени
+                if (!b.name.toLowerCase().includes(searchTerm)) return false;
+                // Фильтр по гаджету
+                if (filters.gadget === 'yes' && !b.hasGadget) return false;
+                if (filters.gadget === 'no' && b.hasGadget) return false;
+                // Фильтр по "стоит апать"
+                if (filters.worth !== 'all' && b.worthUpgrading !== filters.worth) return false;
+                return true;
+            });
 
             if (sortBy === 'rarity') {
-                // Порядок редкостей для сортировки
                 const rarityOrder = {
                     'Обычный': 1,
                     'Редкий': 2,
@@ -657,11 +752,16 @@
                     'Мифический': 5,
                     'Легендарный': 6,
                     'Ультралегендарный': 7,
-                    'Временная': 8
+                    'Временный': 8
                 };
                 filtered.sort((a, b) => (rarityOrder[a.rarity] || 99) - (rarityOrder[b.rarity] || 99));
+            } else if (sortBy === 'difficulty') {
+                filtered.sort((a, b) => a.difficulty - b.difficulty);
+            } else if (sortBy === 'worth') {
+                const worthOrder = { 'Да': 1, 'Возможно': 2, 'Нет': 3 };
+                filtered.sort((a, b) => (worthOrder[a.worthUpgrading] || 4) - (worthOrder[b.worthUpgrading] || 4));
             } else {
-                // по порядку в коде (сохраняем id)
+                // по порядку (id)
                 filtered.sort((a, b) => a.id - b.id);
             }
 
@@ -679,9 +779,14 @@
 
             grid.innerHTML = list.map(b => {
                 const rarityClass = "rarity-" + b.rarity.replace(/ /g, '');
+                const gadgetIcon = b.hasGadget ? '🔹' : '🔸';
+                const worthIcon = b.worthUpgrading === 'Да' ? '✅' : (b.worthUpgrading === 'Нет' ? '❌' : '❓');
+                const stars = '⭐'.repeat(Math.min(b.difficulty, 5)) + ('☆'.repeat(Math.max(0, 5 - b.difficulty)));
                 return `<div class="brawler-card ${rarityClass}" onclick="openViewer('${b.id}')">
                     <div class="name">${escapeHtml(b.name)}</div>
                     <div class="rarity-badge">${b.rarity}</div>
+                    <div class="meta-icons">
+                    </div>
                 </div>`;
             }).join('');
         }
@@ -699,13 +804,21 @@
 
             document.getElementById("viewName").textContent = brawler.name;
             document.getElementById("viewRarity").textContent = brawler.rarity;
-            document.getElementById("viewInfo").textContent = brawler.info || "—";
+            let infoText = brawler.info || "—";
+            infoText = infoText.replace(/Кол\. скинов:\s*\n/, `Кол. скинов: ${brawler.skinCount}\n`);
+            document.getElementById("viewInfo").textContent = infoText;
             document.getElementById("viewStats").textContent = brawler.stats || "—";
             document.getElementById("viewBuild").textContent = brawler.build || "—";
             document.getElementById("viewHowto").textContent = brawler.howto || "—";
-            document.getElementById("viewMatchups").textContent = brawler.matchups || "—";
+            // Обрабатываем матчапы – заменяем имена бойцов на ссылки
+            document.getElementById("viewMatchups").innerHTML = enrichMatchups(brawler.matchups || "—");
             document.getElementById("viewModes").textContent = brawler.modes || "—";
-            document.getElementById("viewVerdict").textContent = brawler.verdict || "—";
+            let verdict = brawler.verdict || "";
+            // Заменяем "Сложность: /10" на "Сложность: X/10"
+            verdict = verdict.replace(/Сложность:\s*\/10/, `Сложность: ${brawler.difficulty}/10`);
+            // Заменяем "Стоит апать?: " на "Стоит апать?: значение"
+            verdict = verdict.replace(/Стоит апать\?:\s*/, `Стоит апать?: ${brawler.worthUpgrading}`);
+            document.getElementById("viewVerdict").textContent = verdict;
 
             document.getElementById("brawlersList").style.display = "none";
             document.getElementById("viewerPanel").classList.add("active");
@@ -714,8 +827,32 @@
         function closeViewer() {
             document.getElementById("brawlersList").style.display = "block";
             document.getElementById("viewerPanel").classList.remove("active");
-            // при возврате список обновляется автоматически (если были изменения)
             renderBrawlers();
+        }
+
+        // ===== Преобразование матчапов: имена бойцов → ссылки =====
+        function enrichMatchups(text) {
+            if (!text || text === "—") return "—";
+            // Собираем все имена бойцов (в порядке убывания длины, чтобы не было конфликтов)
+            const names = brawlers.map(b => b.name).sort((a, b) => b.length - a.length);
+            let result = text;
+            // Заменяем каждое имя на ссылку
+            names.forEach(name => {
+                const brawler = brawlers.find(b => b.name === name);
+                if (!brawler) return;
+
+                const regex = new RegExp(escapeRegExp(name), "g");
+
+                result = result.replace(
+                    regex,
+                    `<a href="#" onclick="openViewer(${brawler.id}); return false;">${name}</a>`
+                );
+            });
+            return result;
+        }
+
+        function escapeRegExp(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         }
 
         // ============================================================
@@ -775,9 +912,23 @@
             document.body.removeChild(textarea);
         }
 
-        // ===== Слушатели для поиска и сортировки =====
+        // ===== Слушатели для поиска, сортировки и фильтров =====
         document.getElementById('searchInput').addEventListener('input', renderBrawlers);
         document.getElementById('sortSelect').addEventListener('change', renderBrawlers);
+
+        // Фильтры – кнопки
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.dataset.filter;
+                const value = this.dataset.value;
+                // Обновляем состояние фильтра
+                filters[filterType] = value;
+                // Убираем active у всех кнопок этого типа
+                document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                renderBrawlers();
+            });
+        });
 
         // ===== Переключение вкладок =====
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -788,7 +939,6 @@
                 document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                 document.getElementById(tabId).classList.add('active');
                 if (tabId === 'tab2') {
-                    // закрываем панель просмотра, если открыта
                     if (document.getElementById('viewerPanel').classList.contains('active')) {
                         closeViewer();
                     } else {
@@ -798,7 +948,7 @@
             });
         });
 
-        // Начальная отрисовка бойцов
+        // Начальная отрисовка
         renderBrawlers();
     </script>
 
