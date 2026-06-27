@@ -1,238 +1,806 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калькулятор силы - Битва Старр</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Битва Старр</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-<style>
-* { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+            background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
+            color: #e6e6e6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px;
+        }
 
-body {
-    margin: 0;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
-    background: radial-gradient(circle at top, #1b1b1b, #0d0d0d);
-    color: #e6e6e6;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 16px;
-}
+        .container {
+            width: 100%;
+            max-width: 720px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            animation: appear 0.5s ease;
+        }
 
-/* Контейнер */
-.container {
-    width: 100%;
-    max-width: 420px;
-    background: #1e1e1e;
-    padding: 20px;
-    border-radius: 18px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-    animation: appear 0.5s ease;
-}
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-@keyframes appear {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 12px;
+        }
 
-h2 {
-    text-align: center;
-    margin: 0 0 16px;
-    font-size: 1.4rem;
-}
+        .tab-btn {
+            flex: 1;
+            padding: 12px 0;
+            background: transparent;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            color: #aaa;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
 
-/* Лейблы */
-label {
-    display: block;
-    margin-top: 12px;
-    margin-bottom: 4px;
-    font-size: 0.9rem;
-    opacity: 0.85;
-}
+        .tab-btn:hover {
+            background: #2a2a2a;
+            color: #fff;
+        }
 
-/* Инпуты */
-input {
-    width: 100%;
-    padding: 14px;
-    font-size: 1rem;
-    border-radius: 10px;
-    border: none;
-    background: #2a2a2a;
-    color: #fff;
-}
+        .tab-btn.active {
+            background: #2a2a2a;
+            color: #fff;
+            box-shadow: inset 0 -3px 0 #fff;
+        }
 
-input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #ffffff;
-}
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
 
-/* Кнопки */
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 16px;
-    font-size: 1rem;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    background: linear-gradient(135deg, #ffffff, #e6e6e6);
-    color: #111;
-    transition: 0.2s;
-}
+        .tab-content.active {
+            display: block;
+        }
 
-button:active {
-    transform: scale(0.97);
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
 
-/* Результат */
-.result {
-    margin-top: 16px;
-    background: #262626;
-    padding: 12px;
-    border-radius: 12px;
-    max-height: 260px;
-    overflow-y: auto;
-    animation: fadeIn 0.3s ease;
-}
+        /* ===== Калькулятор ===== */
+        .calc-label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
+        .calc-input {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: none;
+            background: #2a2a2a;
+            color: #fff;
+        }
 
-/* Строки */
-.line {
-    display: block;
-    padding: 6px 8px;
-    border-radius: 8px;
-    margin-bottom: 4px;
-    font-size: 0.95rem;
-    transition: 0.2s;
-}
+        .calc-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #ffffff;
+        }
 
-/* Hover эффект */
-.line:hover {
-    background: rgba(255,255,255,0.06);
-    transform: translateX(6px);
-}
+        .calc-btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 16px;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff, #e6e6e6);
+            color: #111;
+            transition: 0.2s;
+        }
 
-/* Подсветка выбранной силы */
-.highlight {
-    background: #ffffff;
-    color: #111;
-    box-shadow: 0 0 14px rgba(255,255,255,0.9);
-    animation: pulse 1.5s infinite;
-}
+        .calc-btn:active {
+            transform: scale(0.97);
+        }
 
-@keyframes pulse {
-    0%   { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
-    50%  { box-shadow: 0 0 16px rgba(255,255,255,1); }
-    100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
-}
+        .result {
+            margin-top: 16px;
+            background: #262626;
+            padding: 12px;
+            border-radius: 12px;
+            max-height: 260px;
+            overflow-y: auto;
+        }
 
-/* Кнопка копирования */
-.copy-success {
-    background: linear-gradient(135deg, #ffffff, #f5f5f5) !important;
-    color: #111 !important;
-}
+        .line {
+            display: block;
+            padding: 6px 8px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
 
-/* Для маленьких экранов */
-@media (max-width: 360px) {
-    h2 { font-size: 1.25rem; }
-    input, button { font-size: 0.95rem; padding: 12px; }
-}
-</style>
+        .line:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(6px);
+        }
+
+        .highlight {
+            background: #ffffff;
+            color: #111;
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.9);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 16px rgba(255, 255, 255, 1);
+            }
+            100% {
+                box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        .copy-success {
+            background: linear-gradient(135deg, #ffffff, #f5f5f5) !important;
+            color: #111 !important;
+        }
+
+        /* ===== Бойцы ===== */
+        .brawlers-header h2 {
+            margin: 0 0 16px;
+            font-size: 1.4rem;
+        }
+
+        /* Управление (поиск + сортировка) */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .controls input,
+        .controls select {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: none;
+            background: #2a2a2a;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .controls input::placeholder {
+            color: #888;
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #ffffff;
+        }
+
+        .controls select option {
+            background: #1e1e1e;
+            color: #fff;
+        }
+
+        .brawlers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 12px;
+        }
+
+        .brawler-card {
+            background: #2a2a2a;
+            border-radius: 16px;
+            padding: 14px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid transparent;
+            font-weight: 600;
+        }
+
+        .brawler-card:hover {
+            transform: scale(1.03);
+            border-color: #fff;
+        }
+
+        .brawler-card .name {
+            font-size: 1.1rem;
+            word-break: break-word;
+            line-height: 1.2;
+        }
+
+        .brawler-card .rarity-badge {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-top: 4px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        /* ----- Цвета редкости ----- */
+        .rarity-Обычный {
+            background: #8c8c8c;
+        }
+        .rarity-Редкий {
+            background: #2e8b57;
+        }
+        .rarity-Сверхредкий {
+            background: #4682b4;
+        }
+        .rarity-Эпический {
+            background: #8a2be2;
+        }
+        .rarity-Мифический {
+            background: #dc143c;
+        }
+        .rarity-Легендарный {
+            background: #f1c40f;
+        }
+
+        .rarity-Ультралегендарный {
+            background: linear-gradient(135deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
+            background-size: 300% 300%;
+            animation: rainbow 4s ease infinite;
+            color: #fff;
+        }
+        @keyframes rainbow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .rarity-Временный {
+            background: #1a1a3a;
+            border: 1px solid #4a6a9a;
+            box-shadow: 0 0 12px rgba(70, 130, 200, 0.3);
+            color: #b0d0ff;
+        }
+
+        /* Панель просмотра */
+        .viewer-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .viewer-panel.active {
+            display: block;
+        }
+
+        /* Улучшенная кнопка назад */
+        .viewer-panel .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            color: #111;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+        }
+
+        .viewer-panel .back-btn:hover {
+            transform: scale(1.02);
+            background: #f0f0f0;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
+        }
+
+        .viewer-panel .back-btn:active {
+            transform: scale(0.97);
+        }
+
+        .viewer-panel .brawler-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+
+        .viewer-panel .brawler-rarity {
+            display: inline-block;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            background: #333;
+            margin-bottom: 16px;
+        }
+
+        .viewer-panel .section {
+            margin-top: 18px;
+        }
+
+        .viewer-panel .section-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-bottom: 1px solid #444;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+
+        .viewer-panel .section-content {
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            background: #262626;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: #ddd;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            opacity: 0.6;
+        }
+
+        /* ===== Стили для вкладки "Общее" ===== */
+        .info-block {
+            background: #262626;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .info-block h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .info-block ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 4px 0;
+        }
+
+        .info-block li {
+            padding: 4px 0;
+            line-height: 1.5;
+        }
+
+        .info-block a {
+            color: #8ab4f8;
+            text-decoration: none;
+        }
+
+        .info-block a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 14px;
+            }
+            .brawlers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 8px;
+            }
+            .brawler-card {
+                padding: 10px 4px;
+            }
+            .brawler-card .name {
+                font-size: 0.9rem;
+            }
+            .controls input,
+            .controls select {
+                min-width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
-    <h2>Калькулятор силы - Битва Старр</h2>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="tab3">📋 Общее</button>
+            <button class="tab-btn" data-tab="tab1">📊 Калькулятор</button>
+            <button class="tab-btn" data-tab="tab2">🥊 Бойцы</button>
+        </div>
 
-    <label>HP на уровне:</label>
-    <input type="number" id="hp" placeholder="Например: 5600">
+        <!-- ========== Вкладка 3: Общее ========== -->
+        <div id="tab3" class="tab-content active">
+            <h2>📋 Общее</h2>
+            <div class="info-block">
+                <h3>Об игре «Битва Старр»</h3>
+                <ul>
+                    <li>• Игра была сделана на движке Unity</li>
+                    <li>• Дата выхода - 24.11.2024 (24 ноября 2024 года)</li>
+                </ul>
 
-    <label>Урон на уровне:</label>
-    <input type="number" id="dmg" placeholder="Например: 800">
+                <h3>На данный момент в игре:</h3>
+                <ul>
+                    <li>• 74 бойца</li>
+                    <li>• 95 иконок</li>
+                    <li>• 49 скинов</li>
+                    <li>• 20 гаджетов</li>
+                    <li>• 12 режимов</li>
+                    <li>• 1.000.000+ игроков посетивших игру</li>
+                    <li>• 25 выпущенных обновлений</li>
+                    <li>• Только 6 игроков, достигшив 1м трофеев</li>
+                </ul>
+            </div>
+            <div class="info-block">
+                <h3>🔗 Ссылки по игре «Битва Старр»</h3>
+                <ul>
+                    <li>• Ссылка на игру: <a href="https://yandex.ru/games/app/387326" target="_blank">https://yandex.ru/games/app/387326</a></li>
+                    <li>• Бета-версия игры: <a href="https://yandex.ru/games/app/387326?draft=true" target="_blank">https://yandex.ru/games/app/387326?draft=true</a></li>
+                </ul>
+            </div>
+            <div class="info-block">
+                <h3>Сайт сделан каналом <a href="https://t.me/BitvaStarrNews" target="_blank">https://t.me/BitvaStarrNews</a></li></h3>
+            </div>
+        </div>
 
-    <label>Уровень силы (1–11):</label>
-    <input type="number" id="lvl" min="1" max="11" placeholder="Например: 11">
+        <!-- ========== Вкладка 1: Калькулятор ========== -->
+        <div id="tab1" class="tab-content">
+            <h2>Калькулятор силы</h2>
 
-    <button onclick="calculate()">Рассчитать</button>
+            <label class="calc-label">HP на уровне:</label>
+            <input class="calc-input" type="number" id="hp" placeholder="Например: 5600">
 
-    <div id="result" class="result"></div>
+            <label class="calc-label">Урон на уровне:</label>
+            <input class="calc-input" type="number" id="dmg" placeholder="Например: 800">
 
-    <button id="copyBtn" onclick="copyResult()" style="display:none">
-        Скопировать результат
-    </button>
-</div>
+            <label class="calc-label">Уровень силы (1–11):</label>
+            <input class="calc-input" type="number" id="lvl" min="1" max="11" placeholder="Например: 11">
 
-<script>
-const hpInput = document.getElementById("hp");
-const dmgInput = document.getElementById("dmg");
-const lvlInput = document.getElementById("lvl");
-const result = document.getElementById("result");
-const copyBtn = document.getElementById("copyBtn");
+            <button class="calc-btn" onclick="calculate()">Рассчитать</button>
 
-function calculate() {
-    const hp = +hpInput.value;
-    const dmg = +dmgInput.value;
-    const lvl = +lvlInput.value;
+            <div id="result" class="result"></div>
+            <button id="copyBtn" onclick="copyResult()" style="display:none; margin-top:10px; width:100%; padding:12px; border-radius:12px; border:none; font-weight:600; background:#2a2a2a; color:#fff; cursor:pointer;">
+                Скопировать результат
+            </button>
+        </div>
 
-    if (!hp || !dmg || lvl < 1 || lvl > 11) {
-        result.innerHTML = "Введите корректные данные";
-        copyBtn.style.display = "none";
-        return;
-    }
+        <!-- ========== Вкладка 2: Бойцы ========== -->
+        <div id="tab2" class="tab-content">
+            <div id="brawlersList">
+                <div class="brawlers-header">
+                    <h2>Информация о бойцах</h2>
+                </div>
 
-    const multCurrent = 0.5 + (lvl - 1) * 0.05;
-    const hp11 = hp / multCurrent;
-    const dmg11 = dmg / multCurrent;
+                <!-- Управление: поиск + сортировка -->
+                <div class="controls">
+                    <input type="text" id="searchInput" placeholder="🔍 Поиск по имени..." />
+                    <select id="sortSelect">
+                        <option value="rarity">По редкости</option>
+                        <option value="order">По добавлению</option>
+                    </select>
+                </div>
 
-    let html = "";
-    for (let i = 1; i <= 11; i++) {
-        const mult = 0.5 + (i - 1) * 0.05;
-        const h = Math.round(hp11 * mult);
-        const d = Math.round(dmg11 * mult);
+                <div id="brawlersGrid" class="brawlers-grid"></div>
+            </div>
 
-        html += `<span class="line ${i === lvl ? "highlight" : ""}">
-            ${i} сила — ${h} HP / ${d} урона
-        </span>`;
-    }
+            <!-- Панель просмотра -->
+            <div id="viewerPanel" class="viewer-panel">
+                <button class="back-btn" onclick="closeViewer()">← Назад к списку</button>
+                <div class="brawler-name" id="viewName"></div>
+                <div class="brawler-rarity" id="viewRarity"></div>
 
-    result.innerHTML = html;
-    copyBtn.style.display = "block";
-}
+                <div class="section">
+                    <div class="section-title">📌 1. Общая информация</div>
+                    <div class="section-content" id="viewInfo"></div>
+                </div>
 
-function copyResult() {
-    const text = result.innerText;
+                <div class="section">
+                    <div class="section-title">📊 2. Статы по уровням (HP / Урон)</div>
+                    <div class="section-content" id="viewStats"></div>
+                </div>
 
-    // Надежный способ для телефонов
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
+                <div class="section">
+                    <div class="section-title">⚙️ 3. Лучшая сборка</div>
+                    <div class="section-content" id="viewBuild"></div>
+                </div>
 
-    try {
-        document.execCommand("copy");
-        copyBtn.textContent = "Результат скопирован!";
-        copyBtn.classList.add("copy-success");
-        setTimeout(() => {
-            copyBtn.textContent = "Скопировать результат";
-            copyBtn.classList.remove("copy-success");
-        }, 1000);
-    } catch (e) {
-        alert("Не удалось скопировать 😢");
-    }
+                <div class="section">
+                    <div class="section-title">🧠 4. Как играть</div>
+                    <div class="section-content" id="viewHowto"></div>
+                </div>
 
-    document.body.removeChild(textarea);
-}
-</script>
+                <div class="section">
+                    <div class="section-title">🆚 5. Матчапы</div>
+                    <div class="section-content" id="viewMatchups"></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🏆 6. Лучшие режимы</div>
+                    <div class="section-content" id="viewModes"></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">⭐ Итог</div>
+                    <div class="section-content" id="viewVerdict"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  НАЧАЛЬНЫЕ ДАННЫЕ БОЙЦОВ (жёстко заданы в коде)
+        //  Добавляйте новых бойцов, копируя объект в массив ниже.
+        //  Все изменения только здесь – на сайте редактирование отключено.
+        //  Доступные редкости: Обычный, Редкий, Суперредкий, Эпический,
+        //  Мифический, Легендарный, Ультралегендарный, Временная.
+        // ============================================================
+        const defaultBrawlers = [{
+            id: 1,
+            name: "Шелли",
+            rarity: "Обычный",
+            info: "Редкость: Обычный\nСпособ получения: Начальный\nГаджет: Есть\nКол. скинов: 1\nАтака: Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.\nСупер: Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.\nГаджет: Стрельба по тарелкам —  увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
+            stats: "1 - 2800 / 400\n2 - 3080 / 440\n3 - 3360 / 480\n4 - 3640 / 520\n5 - 3920 / 560\n6 - 4200 / 600\n7 - 4480 / 640\n8 - 4760 / 680\n9 - 5040 / 720\n10 - 5320 / 760\n11 - 5600 / 800",
+            build: "Рекомендуемый уровень: 11\nГаджет: Да, для контроля\nСнаряжение: Щит, Ускорение\nГиперзаряд: 🔥",
+            howto: "- Держите дистанцию\n- Не тратьте супер впустую\n- Используйте гаджет для отхода",
+            matchups: "Хорош против: Танки, Ассасины\nПлох против: Дальнобойные, Контроллеры",
+            modes: "🥇 - Бравлбол\n🥈 - Ограбление\n🥉 - Выживание",
+            verdict: "Моё мнение: Отличный стартовый боец\nСложность: 5/10\nСтоит апать?: Да"
+        }, {
+            id: 2,
+            name: "Кольт",
+            rarity: "Редкий",
+            info: "Редкость: Редкий\nСпособ получения: Трофеи\nГаджет: Есть\nКол. скинов: 6\nАтака: 400\nСупер: 800\nГаджет: 300 (Перезарядка 12 сек)",
+            stats: "1 — 900 / 90\n2 — 1000 / 100\n3 — 1100 / 110",
+            build: "Рекомендуемый уровень: 10\nГаджет: Да, для урона\nСнаряжение: Скорость, Урон\nГиперзаряд: 🤔",
+            howto: "- Стреляйте очередями\n- Используйте супер для контроля\n- Не подходите близко",
+            matchups: "Хорош против: Танки, Ближники\nПлох против: Ассасины, Снайперы",
+            modes: "🥇 - Ограбление\n🥈 - Бравлбол\n🥉 - Выживание",
+            verdict: "Моё мнение: Хорош на дальних дистанциях\nСложность: 6/10\nСтоит апать?: Да"
+        }, {
+            id: 3,
+            name: "Спайк",
+            rarity: "Легендарный",
+            info: "Редкость: Легендарный\nСпособ получения: Ящики\nГаджет: Есть\nКол. скинов: 4\nАтака: 500\nСупер: 900\nГаджет: 400 (Перезарядка 8 сек)",
+            stats: "1 — 800 / 80\n2 — 900 / 90\n3 — 1000 / 100",
+            build: "Рекомендуемый уровень: 11\nГаджет: Да, для контроля зоны\nСнаряжение: Щит, Урон\nГиперзаряд: 🔥",
+            howto: "- Используйте супер для замедления\n- Атакуйте из-за укрытий",
+            matchups: "Хорош против: Танки, Ассасины\nПлох против: Снайперы, Контроллеры",
+            modes: "🥇 - Бравлбол\n🥈 - Ограбление\n🥉 - Выживание",
+            verdict: "Моё мнение: Один из лучших\nСложность: 7/10\nСтоит апать?: Да"
+        }, {
+            id: 4,
+            name: "Сёрдж",
+            rarity: "Ультралегендарный",
+            info: "Редкость: Ультралегендарный\nСпособ получения: Бравл-пасс\nГаджет: Есть\nКол. скинов: 3\nАтака: 350\nСупер: 500\nГаджет: 250 (Перезарядка 9 сек)",
+            stats: "1 — 850 / 85\n2 — 950 / 95\n3 — 1050 / 105",
+            build: "Рекомендуемый уровень: 11\nГаджет: Да, для усиления\nСнаряжение: Скорость, Урон\nГиперзаряд: 🔥",
+            howto: "- Заряжайте супер\n- Используйте ульту для преодоления препятствий",
+            matchups: "Хорош против: Ближники, Танки\nПлох против: Дальнобойные, Контроллеры",
+            modes: "🥇 - Бравлбол\n🥈 - Ограбление\n🥉 - Выживание",
+            verdict: "Моё мнение: Очень сильный, но сложный\nСложность: 8/10\nСтоит апать?: Да"
+        }, {
+            id: 5,
+            name: "Базз",
+            rarity: "Временный",
+            info: "Редкость: Временная (сезонная)\nСпособ получения: Событие\nГаджет: Есть\nКол. скинов: 2\nАтака: 320\nСупер: 480\nГаджет: 280 (Перезарядка 7 сек)",
+            stats: "1 — 920 / 92\n2 — 1020 / 102\n3 — 1120 / 112",
+            build: "Рекомендуемый уровень: 9\nГаджет: Да, для мобильности\nСнаряжение: Ускорение, Щит\nГиперзаряд: 🤔",
+            howto: "- Используйте супер для рывка\n- Атакуйте в ближнем бою",
+            matchups: "Хорош против: Ассасины, Снайперы\nПлох против: Танки, Контроллеры",
+            modes: "🥇 - Выживание\n🥈 - Бравлбол\n🥉 - Ограбление",
+            verdict: "Моё мнение: Интересный, но не везде\nСложность: 6/10\nСтоит апать?: Возможно"
+        }];
+
+        // ===== Инициализация =====
+        let brawlers = defaultBrawlers;
+
+        // Получить отфильтрованный и отсортированный список
+        function getFilteredBrawlers() {
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            const sortBy = document.getElementById('sortSelect').value;
+
+            let filtered = brawlers.filter(b => b.name.toLowerCase().includes(searchTerm));
+
+            if (sortBy === 'rarity') {
+                // Порядок редкостей для сортировки
+                const rarityOrder = {
+                    'Обычный': 1,
+                    'Редкий': 2,
+                    'Сверхредкий': 3,
+                    'Эпический': 4,
+                    'Мифический': 5,
+                    'Легендарный': 6,
+                    'Ультралегендарный': 7,
+                    'Временная': 8
+                };
+                filtered.sort((a, b) => (rarityOrder[a.rarity] || 99) - (rarityOrder[b.rarity] || 99));
+            } else {
+                // по порядку в коде (сохраняем id)
+                filtered.sort((a, b) => a.id - b.id);
+            }
+
+            return filtered;
+        }
+
+        function renderBrawlers() {
+            const grid = document.getElementById("brawlersGrid");
+            const list = getFilteredBrawlers();
+
+            if (!list || list.length === 0) {
+                grid.innerHTML = `<div class="empty-state">Бойцов не найдено..</div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map(b => {
+                const rarityClass = "rarity-" + b.rarity.replace(/ /g, '');
+                return `<div class="brawler-card ${rarityClass}" onclick="openViewer('${b.id}')">
+                    <div class="name">${escapeHtml(b.name)}</div>
+                    <div class="rarity-badge">${b.rarity}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== Открыть просмотр =====
+        function openViewer(id) {
+            const brawler = brawlers.find(b => b.id == id);
+            if (!brawler) return;
+
+            document.getElementById("viewName").textContent = brawler.name;
+            document.getElementById("viewRarity").textContent = brawler.rarity;
+            document.getElementById("viewInfo").textContent = brawler.info || "—";
+            document.getElementById("viewStats").textContent = brawler.stats || "—";
+            document.getElementById("viewBuild").textContent = brawler.build || "—";
+            document.getElementById("viewHowto").textContent = brawler.howto || "—";
+            document.getElementById("viewMatchups").textContent = brawler.matchups || "—";
+            document.getElementById("viewModes").textContent = brawler.modes || "—";
+            document.getElementById("viewVerdict").textContent = brawler.verdict || "—";
+
+            document.getElementById("brawlersList").style.display = "none";
+            document.getElementById("viewerPanel").classList.add("active");
+        }
+
+        function closeViewer() {
+            document.getElementById("brawlersList").style.display = "block";
+            document.getElementById("viewerPanel").classList.remove("active");
+            // при возврате список обновляется автоматически (если были изменения)
+            renderBrawlers();
+        }
+
+        // ============================================================
+        //  КАЛЬКУЛЯТОР
+        // ============================================================
+        function calculate() {
+            const hp = +document.getElementById("hp").value;
+            const dmg = +document.getElementById("dmg").value;
+            const lvl = +document.getElementById("lvl").value;
+            const result = document.getElementById("result");
+            const copyBtn = document.getElementById("copyBtn");
+
+            if (!hp || !dmg || lvl < 1 || lvl > 11) {
+                result.innerHTML = "Введите корректные данные";
+                copyBtn.style.display = "none";
+                return;
+            }
+
+            const multCurrent = 0.5 + (lvl - 1) * 0.05;
+            const hp11 = hp / multCurrent;
+            const dmg11 = dmg / multCurrent;
+
+            let html = "";
+            for (let i = 1; i <= 11; i++) {
+                const mult = 0.5 + (i - 1) * 0.05;
+                const h = Math.round(hp11 * mult);
+                const d = Math.round(dmg11 * mult);
+                const cls = i === lvl ? "line highlight" : "line";
+                html += `<span class="${cls}">${i} сила — ${h} HP / ${d} урона</span>`;
+            }
+            result.innerHTML = html;
+            copyBtn.style.display = "block";
+        }
+
+        function copyResult() {
+            const text = document.getElementById("result").innerText;
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            try {
+                document.execCommand("copy");
+                const copyBtn = document.getElementById("copyBtn");
+                copyBtn.textContent = "Результат скопирован!";
+                copyBtn.classList.add("copy-success");
+                setTimeout(() => {
+                    copyBtn.textContent = "Скопировать результат";
+                    copyBtn.classList.remove("copy-success");
+                }, 1000);
+            } catch (e) {
+                alert("Не удалось скопировать");
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // ===== Слушатели для поиска и сортировки =====
+        document.getElementById('searchInput').addEventListener('input', renderBrawlers);
+        document.getElementById('sortSelect').addEventListener('change', renderBrawlers);
+
+        // ===== Переключение вкладок =====
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tabId = this.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+                if (tabId === 'tab2') {
+                    // закрываем панель просмотра, если открыта
+                    if (document.getElementById('viewerPanel').classList.contains('active')) {
+                        closeViewer();
+                    } else {
+                        renderBrawlers();
+                    }
+                }
+            });
+        });
+
+        // Начальная отрисовка бойцов
+        renderBrawlers();
+    </script>
 
 </body>
 </html>
