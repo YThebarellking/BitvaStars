@@ -98,9 +98,22 @@
         @keyframes fadeIn {
             from {
                 opacity: 0;
+                transform: translateX(20px);
             }
             to {
                 opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-20px);
             }
         }
 
@@ -234,43 +247,44 @@
             color: #fff;
         }
 
-        .filter-group {
+        /* Новая строка фильтров (select) */
+        .filter-row {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
-            gap: 6px 12px;
+            gap: 16px 24px;
             background: #262626;
-            padding: 8px 12px;
+            padding: 12px 16px;
             border-radius: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            align-items: center;
         }
 
-        .filter-group .filter-label {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 1px solid #555;
-            border-radius: 6px;
+        .filter-row label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
             color: #ccc;
-            padding: 4px 10px;
-            font-size: 0.8rem;
+        }
+
+        .filter-row select {
+            background: #2a2a2a;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.2s;
-            font-weight: 600;
+            min-width: 120px;
         }
 
-        .filter-btn:hover {
-            background: #333;
-            border-color: #aaa;
+        .filter-row select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #fff;
         }
 
-        .filter-btn.active {
-            background: #fff;
-            color: #111;
-            border-color: #fff;
+        .filter-row select option {
+            background: #1e1e1e;
         }
 
         .brawlers-grid {
@@ -326,7 +340,7 @@
         }
 
         .brawler-card .meta-icons span {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 0 6px;
             border-radius: 10px;
         }
@@ -383,18 +397,29 @@
         /* Панель просмотра */
         .viewer-panel {
             display: none;
-            animation: fadeIn 0.3s ease;
+            /* анимация появления через active */
         }
 
         .viewer-panel.active {
             display: block;
+            animation: fadeIn 0.3s ease;
         }
 
+        /* класс для анимации закрытия */
+        .viewer-panel.closing {
+            display: block;
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        /* Кнопка «Назад» — закреплена сверху */
         .viewer-panel .back-btn {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: #white; /* фон контейнера */
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #ffffff;
             color: #111;
             border: none;
             border-radius: 10px;
@@ -403,8 +428,10 @@
             font-size: 1rem;
             cursor: pointer;
             transition: 0.15s;
-            margin-bottom: 16px;
+            margin: 0 0 16px 0;
             box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+            width: 100%;
+            justify-content: flex-start;
         }
 
         .viewer-panel .back-btn:hover {
@@ -521,19 +548,22 @@
             .controls select {
                 min-width: 100%;
             }
-            .filter-group {
+            .filter-row {
                 flex-direction: column;
                 align-items: stretch;
             }
+            .filter-row label {
+                justify-content: space-between;
+            }
         }
         .viewer-panel .section-content a {
-           color: #8ab4f8;
-           text-decoration: underline;
-           cursor: pointer;
-       }
-       .viewer-panel .section-content a:hover {
-           color: #ffffff;
-       }
+            color: #8ab4f8;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .viewer-panel .section-content a:hover {
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -618,18 +648,23 @@
                     </select>
                 </div>
 
-                <!-- Фильтры -->
-                <div class="filter-group">
-                    <span class="filter-label">Гаджет:</span>
-                    <button class="filter-btn active" data-filter="gadget" data-value="all">➖ Все</button>
-                    <button class="filter-btn" data-filter="gadget" data-value="yes">✅ Есть</button>
-                    <button class="filter-btn" data-filter="gadget" data-value="no">❌ Нет</button>
-
-                    <span class="filter-label" style="margin-left:12px;">Стоит апать:</span>
-                    <button class="filter-btn active" data-filter="worth" data-value="all">➖ Все</button>
-                    <button class="filter-btn" data-filter="worth" data-value="Да">✅ Да</button>
-                    <button class="filter-btn" data-filter="worth" data-value="Нет">❌ Нет</button>
-                    <button class="filter-btn" data-filter="worth" data-value="Возможно">❓ Возможно</button>
+                <!-- Новые фильтры в виде select -->
+                <div class="filter-row">
+                    <label>Гаджет:
+                        <select id="filterGadget">
+                            <option value="all">Все</option>
+                            <option value="yes">Есть</option>
+                            <option value="no">Нет</option>
+                        </select>
+                    </label>
+                    <label>Стоит апать:
+                        <select id="filterWorth">
+                            <option value="all">Все</option>
+                            <option value="Да">Да</option>
+                            <option value="Нет">Нет</option>
+                            <option value="Возможно">Возможно</option>
+                        </select>
+                    </label>
                 </div>
 
                 <div id="brawlersGrid" class="brawlers-grid"></div>
@@ -699,7 +734,6 @@
             skinCount: 1,
             difficulty: 4,
             worthUpgrading: "Да"
-        // }, {
         }, {
             id: 2,
             name: "Кольт",
@@ -727,18 +761,15 @@
             worth: 'all'     // 'all', 'Да', 'Нет', 'Возможно'
         };
 
-        // Получить отфильтрованный и отсортированный список
+        // ===== Получить отфильтрованный и отсортированный список =====
         function getFilteredBrawlers() {
             const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
             const sortBy = document.getElementById('sortSelect').value;
 
             let filtered = brawlers.filter(b => {
-                // Поиск по имени
                 if (!b.name.toLowerCase().includes(searchTerm)) return false;
-                // Фильтр по гаджету
                 if (filters.gadget === 'yes' && !b.hasGadget) return false;
                 if (filters.gadget === 'no' && b.hasGadget) return false;
-                // Фильтр по "стоит апать"
                 if (filters.worth !== 'all' && b.worthUpgrading !== filters.worth) return false;
                 return true;
             });
@@ -779,9 +810,6 @@
 
             grid.innerHTML = list.map(b => {
                 const rarityClass = "rarity-" + b.rarity.replace(/ /g, '');
-                const gadgetIcon = b.hasGadget ? '🔹' : '🔸';
-                const worthIcon = b.worthUpgrading === 'Да' ? '✅' : (b.worthUpgrading === 'Нет' ? '❌' : '❓');
-                const stars = '⭐'.repeat(Math.min(b.difficulty, 5)) + ('☆'.repeat(Math.max(0, 5 - b.difficulty)));
                 return `<div class="brawler-card ${rarityClass}" onclick="openViewer('${b.id}')">
                     <div class="name">${escapeHtml(b.name)}</div>
                     <div class="rarity-badge">${b.rarity}</div>
@@ -797,11 +825,8 @@
             return div.innerHTML;
         }
 
-        // ===== Открыть просмотр =====
-        function openViewer(id) {
-            const brawler = brawlers.find(b => b.id == id);
-            if (!brawler) return;
-
+        // ===== Обновление данных в панели просмотра =====
+        function updateViewerData(brawler) {
             document.getElementById("viewName").textContent = brawler.name;
             document.getElementById("viewRarity").textContent = brawler.rarity;
             let infoText = brawler.info || "—";
@@ -810,39 +835,63 @@
             document.getElementById("viewStats").textContent = brawler.stats || "—";
             document.getElementById("viewBuild").textContent = brawler.build || "—";
             document.getElementById("viewHowto").textContent = brawler.howto || "—";
-            // Обрабатываем матчапы – заменяем имена бойцов на ссылки
             document.getElementById("viewMatchups").innerHTML = enrichMatchups(brawler.matchups || "—");
             document.getElementById("viewModes").textContent = brawler.modes || "—";
             let verdict = brawler.verdict || "";
-            // Заменяем "Сложность: /10" на "Сложность: X/10"
             verdict = verdict.replace(/Сложность:\s*\/10/, `Сложность: ${brawler.difficulty}/10`);
-            // Заменяем "Стоит апать?: " на "Стоит апать?: значение"
             verdict = verdict.replace(/Стоит апать\?:\s*/, `Стоит апать?: ${brawler.worthUpgrading}`);
             document.getElementById("viewVerdict").textContent = verdict;
-
-            document.getElementById("brawlersList").style.display = "none";
-            document.getElementById("viewerPanel").classList.add("active");
         }
 
+        // ===== Открыть просмотр (с анимацией) =====
+        function openViewer(id) {
+            const brawler = brawlers.find(b => b.id == id);
+            if (!brawler) return;
+            const panel = document.getElementById('viewerPanel');
+            const list = document.getElementById('brawlersList');
+
+            // Если панель уже видна, сначала закрываем с анимацией, потом открываем с новым бойцом
+            if (panel.classList.contains('active')) {
+                panel.classList.add('closing');
+                setTimeout(() => {
+                    panel.classList.remove('active', 'closing');
+                    // Обновляем данные
+                    updateViewerData(brawler);
+                    // Показываем снова с анимацией
+                    requestAnimationFrame(() => {
+                        panel.classList.add('active');
+                    });
+                    list.style.display = 'none';
+                }, 300);
+            } else {
+                // Просто открываем
+                updateViewerData(brawler);
+                panel.classList.add('active');
+                list.style.display = 'none';
+            }
+        }
+
+        // ===== Закрыть просмотр (с анимацией) =====
         function closeViewer() {
-            document.getElementById("brawlersList").style.display = "block";
-            document.getElementById("viewerPanel").classList.remove("active");
-            renderBrawlers();
+            const panel = document.getElementById('viewerPanel');
+            const list = document.getElementById('brawlersList');
+            panel.classList.add('closing');
+            setTimeout(() => {
+                panel.classList.remove('active', 'closing');
+                list.style.display = 'block';
+                renderBrawlers(); // обновляем список на случай, если изменились фильтры
+            }, 300);
         }
 
         // ===== Преобразование матчапов: имена бойцов → ссылки =====
         function enrichMatchups(text) {
             if (!text || text === "—") return "—";
-            // Собираем все имена бойцов (в порядке убывания длины, чтобы не было конфликтов)
             const names = brawlers.map(b => b.name).sort((a, b) => b.length - a.length);
             let result = text;
-            // Заменяем каждое имя на ссылку
             names.forEach(name => {
                 const brawler = brawlers.find(b => b.name === name);
                 if (!brawler) return;
-
                 const regex = new RegExp(escapeRegExp(name), "g");
-
                 result = result.replace(
                     regex,
                     `<a href="#" onclick="openViewer(${brawler.id}); return false;">${name}</a>`
@@ -916,18 +965,14 @@
         document.getElementById('searchInput').addEventListener('input', renderBrawlers);
         document.getElementById('sortSelect').addEventListener('change', renderBrawlers);
 
-        // Фильтры – кнопки
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filterType = this.dataset.filter;
-                const value = this.dataset.value;
-                // Обновляем состояние фильтра
-                filters[filterType] = value;
-                // Убираем active у всех кнопок этого типа
-                document.querySelectorAll(`.filter-btn[data-filter="${filterType}"]`).forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                renderBrawlers();
-            });
+        // Новые фильтры (select)
+        document.getElementById('filterGadget').addEventListener('change', function() {
+            filters.gadget = this.value;
+            renderBrawlers();
+        });
+        document.getElementById('filterWorth').addEventListener('change', function() {
+            filters.worth = this.value;
+            renderBrawlers();
         });
 
         // ===== Переключение вкладок =====
@@ -940,7 +985,7 @@
                 document.getElementById(tabId).classList.add('active');
                 if (tabId === 'tab2') {
                     if (document.getElementById('viewerPanel').classList.contains('active')) {
-                        closeViewer();
+                        // если панель открыта, ничего не делаем или можно оставить
                     } else {
                         renderBrawlers();
                     }
