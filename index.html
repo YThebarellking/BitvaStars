@@ -410,37 +410,6 @@
             animation: fadeOut 0.3s ease forwards;
         }
 
-        .viewer-panel .back-btn {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: #white;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #111;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 20px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.15s;
-            margin: 0 0 16px 0;
-            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
-            width: 100%;
-            justify-content: flex-start;
-        }
-
-        .viewer-panel .back-btn:hover {
-            transform: scale(1.02);
-            background: #f0f0f0;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
-        }
-
-        .viewer-panel .back-btn:active {
-            transform: scale(0.97);
-        }
 
         .viewer-panel .brawler-name {
             font-size: 1.8rem;
@@ -666,7 +635,6 @@
             </div>
 
             <div id="viewerPanel" class="viewer-panel">
-                <button class="back-btn" onclick="closeViewer()">← Назад к списку</button>
                 <div class="brawler-name" id="viewName"></div>
                 <div class="brawler-rarity" id="viewRarity"></div>
 
@@ -939,6 +907,9 @@
             let infoText = brawler.info || "—";
             infoText = infoText.replace(/Кол\. скинов:\s*\n/, `Кол. скинов: ${brawler.skinCount}\n`);
             infoText = infoText.replace(/Редкость:\s*\n/, `Редкость: ${brawler.rarity}\n`);
+            // Заменяем "Гаджет: " на "Гаджет: Есть" или "Гаджет: Нет"
+            const gadgetText = brawler.hasGadget ? "Есть" : "Нет";
+            infoText = infoText.replace(/Гаджет:\s*\n?/, `Гаджет: ${gadgetText}\n`);
             document.getElementById("viewInfo").textContent = infoText;
             document.getElementById("viewStats").textContent = brawler.stats || "—";
             document.getElementById("viewBuild").textContent = brawler.build || "—";
