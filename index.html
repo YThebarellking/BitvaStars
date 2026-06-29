@@ -530,6 +530,19 @@
         .viewer-panel .section-content a:hover {
             color: #ffffff;
         }
+        .brawler-card .badge-extra {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 2px 8px;
+           border-radius: 12px;
+            font-size: 0.7rem;
+        font-weight: 600;
+            color: #fff;
+            pointer-events: none;
+            z-index: 2;
+        }
     </style>
 </head>
 <body>
@@ -968,15 +981,31 @@
         function renderBrawlers() {
             const grid = document.getElementById("brawlersGrid");
             const list = getFilteredBrawlers();
+            const sortBy = document.getElementById('sortSelect').value;
 
             if (!list || list.length === 0) {
                 grid.innerHTML = `<div class="empty-state">Бойцов не найдено..</div>`;
-                return;
+                        return;
             }
 
             grid.innerHTML = list.map(b => {
                 const rarityClass = "rarity-" + b.rarity.replace(/ /g, '');
+        
+                // Определяем дополнительный индикатор в зависимости от сортировки
+                let extraHtml = '';
+                if (sortBy === 'difficulty') {
+                    extraHtml = `<span class="badge-extra">${b.difficulty}/10</span>`;
+                } else if (sortBy === 'worth') {
+                    let emoji = '';
+                    if (b.worthUpgrading === 'Да') emoji = '✅';
+                    else if (b.worthUpgrading === 'Возможно') emoji = '➖';
+                    else if (b.worthUpgrading === 'Нет') emoji = '❌';
+                    else emoji = '❓';
+                    extraHtml = `<span class="badge-extra">${emoji}</span>`;
+                }
+
                 return `<div class="brawler-card ${rarityClass}" onclick="openViewer('${b.id}')">
+                    ${extraHtml}
                     <div class="name">${escapeHtml(b.name)}</div>
                     <div class="rarity-badge">${b.rarity}</div>
                     <div class="meta-icons"></div>
