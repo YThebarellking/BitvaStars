@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Битва Старр — Шелли</title>
+    <title>Битва Старр</title>
     <style>
         * {
             box-sizing: border-box;
@@ -508,24 +508,102 @@
             font-weight: 600;
             color: #fff;
         }
-        .shelly-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px 16px;
-            font-size: 0.95rem;
+
+        /* ─── УПРОЩЁННАЯ ТАБЛИЦА СТАТОВ (без шкал) ─── */
+        .stats-table-wrap {
+            overflow-x: auto;
+            border-radius: 10px;
+            background: #1a1a1a;
         }
-        .shelly-stats-grid .stat-line {
-            display: flex;
-            justify-content: space-between;
-            padding: 3px 0;
-            border-bottom: 1px solid #2a2a2a;
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+            min-width: 220px;
         }
-        .shelly-stats-grid .stat-line .lvl {
+        .stats-table thead th {
+            background: #2a2a2a;
             color: #aaa;
+            font-weight: 600;
+            padding: 10px 12px;
+            text-align: center;
+            border-bottom: 2px solid #3a3a3a;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
-        .shelly-stats-grid .stat-line .vals {
-            color: #fff;
+        .stats-table tbody td {
+            padding: 8px 12px;
+            text-align: center;
+            border-bottom: 1px solid #2a2a2a;
+            transition: background 0.15s;
+            font-variant-numeric: tabular-nums;
         }
+        .stats-table tbody tr {
+            transition: background 0.15s;
+        }
+        .stats-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .stats-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .stats-table .col-level {
+            font-weight: 700;
+            color: #eee;
+            width: 20%;
+        }
+        .stats-table .col-health {
+            color: #6fcf97;
+            font-weight: 500;
+            width: 40%;
+        }
+        .stats-table .col-damage {
+            color: #f28b82;
+            font-weight: 500;
+            width: 40%;
+        }
+
+        .stats-table tbody tr.row-current {
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+        .stats-table tbody tr.row-current td {
+            font-weight: 600;
+        }
+        .stats-table .level-badge {
+            display: inline-block;
+            background: #333;
+            padding: 0 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+        .stats-table .level-badge.max {
+            background: #f1c40f;
+            color: #111;
+        }
+
+        /* адаптация для телефонов */
+        @media (max-width: 500px) {
+            .stats-table {
+                font-size: 0.8rem;
+            }
+            .stats-table thead th,
+            .stats-table tbody td {
+                padding: 6px 8px;
+            }
+            .stats-table .col-level {
+                width: 18%;
+            }
+            .stats-table .col-health,
+            .stats-table .col-damage {
+                width: 41%;
+            }
+        }
+
         .shelly-mode-row {
             display: flex;
             gap: 12px;
@@ -727,10 +805,11 @@
                     <div class="section-content" id="viewGeneral" style="white-space:normal;"></div>
                 </div>
 
+                <!-- ===== УПРОЩЁННАЯ ТАБЛИЦА СТАТОВ ===== -->
                 <div class="section">
-                    <div class="section-title">Здоровье / Урон</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div class="shelly-stats-grid" id="statsGrid"></div>
+                    <div class="section-title">📊 Здоровье / Урон по уровням</div>
+                    <div class="section-content" style="white-space:normal; padding:6px 8px;">
+                        <div class="stats-table-wrap" id="statsTableWrap"></div>
                     </div>
                 </div>
 
@@ -754,7 +833,7 @@
                     </div>
                 </div>
 
-                <!-- Секция с гаджетом (id для управления видимостью) -->
+                <!-- Секция с гаджетом -->
                 <div class="section" id="gadgetSection">
                     <div class="section-title">Усиления</div>
                     <div class="section-content" style="white-space:normal; padding:6px 12px;">
@@ -804,7 +883,7 @@
                 </div>
 
                 <div class="section">
-                    <div class="section-title">Скины — <span id="skinCountLabel"></span> скинов</div>
+                    <div class="section-title">Скины - <span id="skinCountLabel"></span></div>
                     <div class="section-content" style="white-space:normal; padding:6px 12px;">
                         <div id="skinList"></div>
                     </div>
@@ -826,10 +905,7 @@
     </div><!-- /container -->
 
     <script>
-        // ============================================================
-        //  ДАННЫЕ БОЙЦА (единственный — Шелли, но структура универсальна)
-        //  Все длинные тире (—) заменены на обычные дефисы (-)
-        // ============================================================
+
         const defaultBrawlers = [{
             id: 1,
             name: "Шелли",
@@ -839,7 +915,7 @@
             stats: "1 - 3700 здоровья / 300 урона\n2 - 4070 здоровья / 330 урона\n3 - 4440 здоровья / 360 урона\n4 - 4810 здоровья / 390 урона\n5 - 5180 здоровья / 420 урона\n6 - 5550 здоровья / 450 урона\n7 - 5920 здоровья / 480 урона\n8 - 6290 здоровья / 510 урона\n9 - 6660 здоровья / 540 урона\n10 - 7030 здоровья / 570 урона\n11 - 7400 здоровья / 600 урона",
             attackDesc: "Картечь - Пушка Шелли выпускает сноп пуль на длинную дистанцию. Чем больше пуль достигает цели, тем больше урон.",
             superDesc: "Суперобстрел - Пушка Шелли сносит и укрытия, и врагов.",
-            gadgetDesc: "Стрельба по тарелкам - увеличивает дальность атаки на 5 секунд. Перезарядка (16) сек",
+            gadgetDesc: "Стрельба по тарелкам - увеличивает дальность атаки на 5 секунд. (Перезарядка 16 сек)",
             tips: "- Старайтесь играть от кустов и на закрытых картах\n- Не тратьте супер впустую\n- Используйте гаджет, чтобы добить врага на большой дистанции",
             goodMatchup: "Танк (Булл, Роза)",
             badMatchup: "Контроль, Метатели (Гром, Брали, Тара)",
@@ -852,7 +928,7 @@
             opinion: "Отличный стартовый боец",
             difficulty: 4,
             worthUpgrading: "Да",
-            hasGadget: true  // если false — секция с гаджетом скрывается
+            hasGadget: true
         }];
 
         let brawlers = defaultBrawlers;
@@ -862,6 +938,13 @@
         };
 
         // ===== Вспомогательные функции =====
+        function pluralizeSkin(count) {
+            if (count === 0) return '0 скинов';
+            if (count === 1) return '1 скин';
+            if (count >= 2 && count <= 4) return count + ' скина';
+            return count + ' скинов';
+        }
+
         function getFilteredBrawlers() {
             const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
             const sortBy = document.getElementById('sortSelect').value;
@@ -924,43 +1007,106 @@
             return div.innerHTML;
         }
 
-        // ===== ОБНОВЛЕНИЕ ПАНЕЛИ (без fallback-значений) =====
+        function escapeRegExp(str) {
+            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function enrichMatchups(text) {
+            if (!text || text === "—" || text === "") return "—";
+            const names = brawlers.map(b => b.name).sort((a, b) => b.length - a.length);
+            let result = text;
+            names.forEach(name => {
+                const brawler = brawlers.find(b => b.name === name);
+                if (!brawler) return;
+                const regex = new RegExp(escapeRegExp(name), "g");
+                result = result.replace(
+                    regex,
+                    `<a href="#" onclick="openViewer(${brawler.id}); return false;">${name}</a>`
+                );
+            });
+            return result;
+        }
+
+        // ─── УПРОЩЁННАЯ ТАБЛИЦА (без шкал) ───
+        function renderStatsTable(statsStr) {
+            const wrap = document.getElementById('statsTableWrap');
+            if (!statsStr || statsStr.trim() === '') {
+                wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Нет данных</div>';
+                return;
+            }
+
+            const lines = statsStr.split('\n').filter(s => s.trim() !== '');
+            if (lines.length === 0) {
+                wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Нет данных</div>';
+                return;
+            }
+
+            // Парсим: "1 - 3700 здоровья / 300 урона"
+            const parsed = lines.map(line => {
+                const parts = line.split('-');
+                if (parts.length !== 2) return null;
+                const level = parseInt(parts[0].trim(), 10);
+                const rest = parts[1].trim();
+                const healthMatch = rest.match(/(\d+)\s*здоровья/);
+                const dmgMatch = rest.match(/(\d+)\s*урона/);
+                if (!healthMatch || !dmgMatch) return null;
+                return {
+                    level,
+                    health: parseInt(healthMatch[1], 10),
+                    damage: parseInt(dmgMatch[1], 10)
+                };
+            }).filter(item => item !== null);
+
+            if (parsed.length === 0) {
+                wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Не удалось распарсить данные</div>';
+                return;
+            }
+
+            let html = `<table class="stats-table">
+                <thead>
+                    <tr>
+                        <th class="col-level">Уровень</th>
+                        <th class="col-health">❤️ Здоровье</th>
+                        <th class="col-damage">⚔️ Урон</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+            parsed.forEach((p) => {
+                const isMax = p.level === 11;
+                const rowClass = isMax ? 'row-current' : '';
+                const badgeClass = isMax ? 'level-badge max' : 'level-badge';
+
+                html += `<tr class="${rowClass}">
+                    <td class="col-level"><span class="${badgeClass}">${p.level}</span></td>
+                    <td class="col-health">${p.health}</td>
+                    <td class="col-damage">${p.damage}</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            wrap.innerHTML = html;
+        }
+
+        // ===== Обновление панели просмотра =====
         function updateViewerData(brawler) {
             if (!brawler) return;
 
-            // Имя и редкость
             document.getElementById("viewName").textContent = brawler.name;
             document.getElementById("viewRarity").textContent = brawler.rarity;
 
-            // Общая информация
             const generalEl = document.getElementById("viewGeneral");
             generalEl.innerHTML = `
-                ${brawler.name} — <strong>${brawler.rarity}</strong> боец, класса <span class="shelly-class-badge">(${brawler.classLabel})</span>.
+                ${brawler.name} - <strong>${brawler.rarity}</strong> боец, класса <span class="shelly-class-badge">${brawler.classLabel}</span>.
                 <div class="shelly-sub">${brawler.generalNote || ''}</div>
             `;
 
-            // Статы — парсим строку с разделителем " - "
-            const statsGrid = document.getElementById("statsGrid");
-            const statsLines = (brawler.stats || "").split('\n').filter(s => s.trim());
-            statsGrid.innerHTML = statsLines.map(line => {
-                // Пробуем разделить по " - " (пробел, дефис, пробел)
-                let parts = line.split(' - ');
-                if (parts.length === 2) {
-                    return `<div class="stat-line"><span class="lvl">${parts[0].trim()}</span><span class="vals">${parts[1].trim()}</span></div>`;
-                }
-                // fallback: если не нашлось, пробуем по дефису без пробелов
-                parts = line.split('-');
-                if (parts.length === 2) {
-                    return `<div class="stat-line"><span class="lvl">${parts[0].trim()}</span><span class="vals">${parts[1].trim()}</span></div>`;
-                }
-                return `<div class="stat-line"><span class="lvl">${line}</span></div>`;
-            }).join('');
+            // ─── Упрощённая таблица ───
+            renderStatsTable(brawler.stats);
 
-            // Способности
             document.getElementById("viewAttack").textContent = brawler.attackDesc || '';
             document.getElementById("viewSuper").textContent = brawler.superDesc || '';
 
-            // Гаджет — управление видимостью секции
             const gadgetSection = document.getElementById('gadgetSection');
             if (brawler.hasGadget) {
                 gadgetSection.style.display = 'block';
@@ -969,28 +1115,23 @@
                 gadgetSection.style.display = 'none';
             }
 
-            // Советы
             document.getElementById("tipsText").textContent = brawler.tips || '';
 
-            // Матчапы
-            document.getElementById("goodMatchup").textContent = brawler.goodMatchup || '';
-            document.getElementById("badMatchup").textContent = brawler.badMatchup || '';
+            document.getElementById("goodMatchup").innerHTML = enrichMatchups(brawler.goodMatchup || '');
+            document.getElementById("badMatchup").innerHTML = enrichMatchups(brawler.badMatchup || '');
 
-            // Режимы
             document.getElementById("mode1").textContent = brawler.mode1 || '';
             document.getElementById("mode2").textContent = brawler.mode2 || '';
             document.getElementById("mode3").textContent = brawler.mode3 || '';
 
-            // Сборка
             document.getElementById("buildText").textContent = brawler.buildDesc || '';
 
-            // Скины
-            document.getElementById("skinCountLabel").textContent = brawler.skinCount || 0;
+            const skinCount = brawler.skinCount || 0;
+            document.getElementById("skinCountLabel").textContent = pluralizeSkin(skinCount);
             const skinList = document.getElementById("skinList");
             const skins = brawler.skinList || [];
             skinList.innerHTML = skins.map(s => `<span class="shelly-skin-item">${s}</span>`).join('');
 
-            // Мнение
             document.getElementById("opinionText").textContent = brawler.opinion || '';
             document.getElementById("difficultyText").textContent = (brawler.difficulty !== undefined) ? brawler.difficulty + '/10' : '';
             document.getElementById("worthText").textContent = brawler.worthUpgrading || '';
@@ -1048,9 +1189,7 @@
             }
         }
 
-        // ============================================================
         //  КАЛЬКУЛЯТОР
-        // ============================================================
         function calculate() {
             const hp = +document.getElementById("hp").value;
             const dmg = +document.getElementById("dmg").value;
