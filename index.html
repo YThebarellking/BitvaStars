@@ -5,15 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Битва Старр</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
-        html,
-        body {
-            margin: 0;
-            height: 100%;
-            min-height: 100vh;
-        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; height: 100%; min-height: 100vh; }
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
             background: radial-gradient(circle at top, #1b1b1b, #0d0d0d) fixed;
@@ -30,18 +23,12 @@
             background: #1e1e1e;
             padding: 20px;
             border-radius: 18px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             animation: appear 0.5s ease;
         }
         @keyframes appear {
-            from {
-                opacity: 0;
-                transform: translateY(16px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .tabs {
             display: flex;
@@ -49,6 +36,7 @@
             margin-bottom: 20px;
             border-bottom: 1px solid #333;
             padding-bottom: 12px;
+            flex-wrap: wrap;
         }
         .tab-btn {
             flex: 1;
@@ -62,197 +50,45 @@
             cursor: pointer;
             transition: 0.2s;
             text-align: center;
+            min-width: 80px;
         }
-        .tab-btn:hover {
-            background: #2a2a2a;
-            color: #fff;
-        }
-        .tab-btn.active {
-            background: #2a2a2a;
-            color: #fff;
-            box-shadow: inset 0 -3px 0 #fff;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-            animation: slideFade .35s ease;
-        }
+        .tab-btn:hover { background: #2a2a2a; color: #fff; }
+        .tab-btn.active { background: #2a2a2a; color: #fff; box-shadow: inset 0 -3px 0 #fff; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideFade .35s ease; }
         @keyframes slideFade {
-            from {
-                opacity: 0;
-                transform: translateX(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            from { opacity: 0; transform: translateX(25px); }
+            to { opacity: 1; transform: translateX(0); }
         }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-        }
-        .calc-label {
-            display: block;
-            margin-top: 12px;
-            margin-bottom: 4px;
-            font-size: 0.9rem;
-            opacity: 0.85;
-        }
-        .calc-input {
-            width: 100%;
-            padding: 14px;
-            font-size: 1rem;
-            border-radius: 10px;
-            border: none;
-            background: #2a2a2a;
-            color: #fff;
-        }
-        .calc-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #ffffff;
-        }
-        .calc-btn {
-            width: 100%;
-            padding: 14px;
-            margin-top: 16px;
-            font-size: 1rem;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            background: linear-gradient(135deg, #ffffff, #e6e6e6);
-            color: #111;
-            transition: 0.2s;
-        }
-        .calc-btn:active {
-            transform: scale(0.97);
-        }
-        .result {
-            margin-top: 16px;
-            background: #262626;
-            padding: 12px;
-            border-radius: 12px;
-            max-height: 260px;
-            overflow-y: auto;
-        }
-        .line {
-            display: block;
-            padding: 6px 8px;
-            border-radius: 8px;
-            margin-bottom: 4px;
-            font-size: 0.95rem;
-            transition: 0.2s;
-        }
-        .line:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateX(6px);
-        }
-        .highlight {
-            background: #ffffff;
-            color: #111;
-            box-shadow: 0 0 14px rgba(255, 255, 255, 0.9);
-            animation: pulse 1.5s infinite;
-        }
+        .calc-label { display: block; margin-top: 12px; margin-bottom: 4px; font-size: 0.9rem; opacity: 0.85; }
+        .calc-input { width: 100%; padding: 14px; font-size: 1rem; border-radius: 10px; border: none; background: #2a2a2a; color: #fff; }
+        .calc-input:focus { outline: none; box-shadow: 0 0 0 2px #fff; }
+        .calc-btn { width: 100%; padding: 14px; margin-top: 16px; font-size: 1rem; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; background: linear-gradient(135deg, #fff, #e6e6e6); color: #111; transition: 0.2s; }
+        .calc-btn:active { transform: scale(0.97); }
+        .result { margin-top: 16px; background: #262626; padding: 12px; border-radius: 12px; max-height: 260px; overflow-y: auto; }
+        .line { display: block; padding: 6px 8px; border-radius: 8px; margin-bottom: 4px; font-size: 0.95rem; transition: 0.2s; }
+        .line:hover { background: rgba(255,255,255,0.06); transform: translateX(6px); }
+        .highlight { background: #fff; color: #111; box-shadow: 0 0 14px rgba(255,255,255,0.9); animation: pulse 1.5s infinite; }
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 16px rgba(255, 255, 255, 1);
-            }
-            100% {
-                box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
-            }
+            0% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+            50% { box-shadow: 0 0 16px rgba(255,255,255,1); }
+            100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
         }
-        .copy-success {
-            background: linear-gradient(135deg, #ffffff, #f5f5f5) !important;
-            color: #111 !important;
-        }
-        .brawlers-header h2 {
-            margin: 0 0 16px;
-            font-size: 1.4rem;
-        }
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .controls input,
-        .controls select {
-            flex: 1;
-            min-width: 140px;
-            padding: 12px 14px;
-            border-radius: 10px;
-            border: none;
-            background: #2a2a2a;
-            color: #fff;
-            font-size: 0.95rem;
-        }
-        .controls input::placeholder {
-            color: #888;
-        }
-        .controls input:focus,
-        .controls select:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #ffffff;
-        }
-        .controls select option {
-            background: #1e1e1e;
-            color: #fff;
-        }
+        .copy-success { background: linear-gradient(135deg, #fff, #f5f5f5) !important; color: #111 !important; }
+        .brawlers-header h2 { margin: 0 0 16px; font-size: 1.4rem; }
+        .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+        .controls input, .controls select { flex: 1; min-width: 140px; padding: 12px 14px; border-radius: 10px; border: none; background: #2a2a2a; color: #fff; font-size: 0.95rem; }
+        .controls input::placeholder { color: #888; }
+        .controls input:focus, .controls select:focus { outline: none; box-shadow: 0 0 0 2px #fff; }
+        .controls select option { background: #1e1e1e; color: #fff; }
         .filter-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px 24px;
-            background: #262626;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            align-items: center;
+            display: flex; flex-wrap: wrap; gap: 16px 24px;
+            background: #262626; padding: 12px 16px; border-radius: 10px; margin-bottom: 16px; align-items: center;
         }
-        .filter-row label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            color: #ccc;
-        }
-        .filter-row select {
-            background: #2a2a2a;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            min-width: 120px;
-        }
-        .filter-row select:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #fff;
-        }
-        .filter-row select option {
-            background: #1e1e1e;
-        }
+        .filter-row label { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: #ccc; }
+        .filter-row select { background: #2a2a2a; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; min-width: 120px; }
+        .filter-row select:focus { outline: none; box-shadow: 0 0 0 2px #fff; }
+        .filter-row select option { background: #1e1e1e; }
         .brawlers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -273,678 +109,340 @@
             border: 2px solid transparent;
             font-weight: 600;
             position: relative;
+            min-height: 100px;
         }
-        .brawler-card:hover {
-            transform: scale(1.03);
-            border-color: #fff;
-        }
+        .brawler-card:hover { transform: scale(1.03); border-color: #fff; }
         .brawler-card .name {
-            font-size: 1.1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
             word-break: break-word;
-            line-height: 1.2;
+            font-size: 0.85rem;
+            line-height: 1.3;
+            max-height: 2.6em;
         }
-        .brawler-card .rarity-badge {
-            font-size: 0.7rem;
-            opacity: 0.9;
-            margin-top: 4px;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 2px 8px;
-            border-radius: 12px;
-        }
-        .brawler-card .meta-icons {
-            font-size: 0.7rem;
-            margin-top: 6px;
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .brawler-card .meta-icons span {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0 6px;
-            border-radius: 10px;
-        }
-        .brawler-card .difficulty-stars {
-            color: #f1c40f;
-        }
-        .rarity-Обычный {
-            background: #89cde6;
-        }
-        .rarity-Редкий {
-            background: #32cd32;
-        }
-        .rarity-Сверхредкий {
-            background: #1e90ff;
-        }
-        .rarity-Эпический {
-            background: #9932cc;
-        }
-        .rarity-Мифический {
-            background: #ff0000;
-        }
-        .rarity-Легендарный {
-            background: #edbf00;
-        }
-        .rarity-Ультралегендарный {
-            background: linear-gradient(135deg, #2f014c, #db2c8a, #fea525, #daf948, #a7fc67, #aefce0);
-            background-size: 300% 300%;
-            animation: rainbow 5s ease infinite;
-            color: #fff;
-        }
+        .brawler-card .rarity-badge { font-size: 0.7rem; opacity: 0.9; margin-top: 4px; background: rgba(0,0,0,0.4); padding: 2px 8px; border-radius: 12px; }
+        .brawler-card .meta-icons { font-size: 0.7rem; margin-top: 6px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+        .brawler-card .meta-icons span { background: rgba(0,0,0,0.3); padding: 0 6px; border-radius: 10px; }
+        .rarity-Обычный { background: #89cde6; }
+        .rarity-Редкий { background: #32cd32; }
+        .rarity-Сверхредкий { background: #1e90ff; }
+        .rarity-Эпический { background: #9932cc; }
+        .rarity-Мифический { background: #ff0000; }
+        .rarity-Легендарный { background: #edbf00; }
+        .rarity-Ультралегендарный { background: linear-gradient(135deg, #2f014c, #db2c8a, #fea525, #daf948, #a7fc67, #aefce0); background-size: 300% 300%; animation: rainbow 5s ease infinite; color: #fff; }
         @keyframes rainbow {
-            0% {
-                background-position: -100% 50%;
-            }
-            50% {
-                background-position: -55% 50%;
-            }
-            100% {
-                background-position: -100% 50%;
-            }
+            0% { background-position: -100% 50%; }
+            50% { background-position: -55% 50%; }
+            100% { background-position: -100% 50%; }
         }
-        .rarity-Временный {
-            background: #272752;
-            border: 2px solid #4a6a9a;
-            box-shadow: 0 0 12px rgba(70, 130, 200, 0.3);
-            color: #b0d0ff;
-        }
-        .viewer-panel {
-            display: none;
-        }
-        .viewer-panel.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-        .viewer-panel.closing {
-            display: block;
-            animation: fadeOut 0.3s ease forwards;
-        }
-        .viewer-panel .brawler-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 0 0 4px;
-        }
-        .viewer-panel .brawler-rarity {
-            display: inline-block;
-            padding: 2px 14px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            background: #333;
-            margin-bottom: 16px;
-        }
-        .viewer-panel .section {
-            margin-top: 18px;
-        }
-        .viewer-panel .section-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            border-bottom: 1px solid #444;
-            padding-bottom: 4px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .viewer-panel .section-content {
-            white-space: pre-wrap;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            background: #262626;
-            padding: 10px 12px;
-            border-radius: 10px;
-            color: #ddd;
-        }
-        .viewer-panel .section-content a {
-            color: #8ab4f8;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-        .viewer-panel .section-content a:hover {
-            color: #fff;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 40px 0;
-            opacity: 0.6;
-        }
-        .info-block {
-            background: #262626;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-        .info-block h3 {
-            margin-top: 0;
-            margin-bottom: 8px;
-        }
-        .info-block ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 4px 0;
-        }
-        .info-block li {
-            padding: 4px 0;
-            line-height: 1.5;
-        }
-        .info-block a {
-            color: #8ab4f8;
-            text-decoration: none;
-        }
-        .info-block a:hover {
-            text-decoration: underline;
-        }
+        .rarity-Ивентовый { background: #00cbbb; }
+
+        .viewer-panel { display: none; }
+        .viewer-panel.active { display: block; animation: fadeIn 0.3s ease; }
+        .viewer-panel.closing { display: block; animation: fadeOut 0.3s ease forwards; }
+        .viewer-panel .brawler-name { font-size: 1.8rem; font-weight: 700; margin: 0 0 4px; }
+        .viewer-panel .brawler-rarity { display: inline-block; padding: 2px 14px; border-radius: 20px; font-size: 0.9rem; background: #333; margin-bottom: 16px; }
+        .viewer-panel .section { margin-top: 18px; }
+        .viewer-panel .section-title { font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid #444; padding-bottom: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .viewer-panel .section-content { white-space: pre-wrap; font-size: 0.95rem; line-height: 1.5; background: #262626; padding: 10px 12px; border-radius: 10px; color: #ddd; }
+        .viewer-panel .section-content a { color: #8ab4f8; text-decoration: underline; cursor: pointer; }
+        .viewer-panel .section-content a:hover { color: #fff; }
+        .empty-state { text-align: center; padding: 40px 0; opacity: 0.6; }
+        .info-block { background: #262626; padding: 16px; border-radius: 12px; margin-bottom: 16px; }
+        .info-block h3 { margin-top: 0; margin-bottom: 8px; }
+        .info-block ul { list-style: none; padding-left: 0; margin: 4px 0; }
+        .info-block li { padding: 4px 0; line-height: 1.5; }
+        .info-block a { color: #8ab4f8; text-decoration: none; }
+        .info-block a:hover { text-decoration: underline; }
         @media (max-width: 480px) {
-            .container {
-                padding: 14px;
-            }
-            .brawlers-grid {
-                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-                gap: 8px;
-            }
-            .brawler-card {
-                padding: 10px 4px;
-            }
-            .brawler-card .name {
-                font-size: 0.9rem;
-            }
-            .controls input,
-            .controls select {
-                min-width: 100%;
-            }
-            .filter-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .filter-row label {
-                justify-content: space-between;
-            }
-        }
-        .viewer-panel .section-content a {
-            color: #8ab4f8;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-        .viewer-panel .section-content a:hover {
-            color: #ffffff;
+            .container { padding: 14px; }
+            .brawlers-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; }
+            .brawler-card { padding: 10px 4px; min-height: 80px; }
+            .brawler-card .name { font-size: 0.75rem; }
+            .controls input, .controls select { min-width: 100%; }
+            .filter-row { flex-direction: column; align-items: stretch; }
+            .filter-row label { justify-content: space-between; }
         }
         .brawler-card .badge-extra {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: rgba(0, 0, 0, 0.65);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #fff;
-            pointer-events: none;
-            z-index: 2;
+            position: absolute; top: 6px; right: 6px;
+            background: rgba(0,0,0,0.65); padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; color: #fff; pointer-events: none; z-index: 2;
         }
         .shelly-ability-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 10px;
-            background: #1e1e1e;
-            padding: 8px 10px;
-            border-radius: 10px;
-            transition: background 0.2s;
+            display: flex; align-items: flex-start; gap: 12px;
+            margin-bottom: 10px; background: #1e1e1e; padding: 8px 10px; border-radius: 10px; transition: background 0.2s;
         }
-        .shelly-ability-row:hover {
-            background: #2a2a2a;
-        }
-        .shelly-ability-row img {
-            width: 36px;
-            height: 36px;
-            flex-shrink: 0;
-            border-radius: 8px;
-            background: #2a2a2a;
-            padding: 4px;
-            object-fit: contain;
-        }
-        .shelly-ability-row .ability-text {
-            flex: 1;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        .shelly-ability-row .ability-label {
-            font-weight: 600;
-            color: #fff;
-        }
-
-        /* ─── УПРОЩЁННАЯ ТАБЛИЦА СТАТОВ (без шкал) ─── */
-        .stats-table-wrap {
-            overflow-x: auto;
-            border-radius: 10px;
-            background: #1a1a1a;
-            transition: all 0.3s ease;
-        }
-        .stats-table-wrap.collapsed {
-            display: none;
-        }
-        .stats-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.92rem;
-            min-width: 220px;
-        }
-        .stats-table thead th {
-            background: #2a2a2a;
-            color: #aaa;
-            font-weight: 600;
-            padding: 10px 12px;
-            text-align: center;
-            border-bottom: 2px solid #3a3a3a;
-            font-size: 0.85rem;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-        }
-        .stats-table tbody td {
-            padding: 8px 12px;
-            text-align: center;
-            border-bottom: 1px solid #2a2a2a;
-            transition: background 0.15s;
-            font-variant-numeric: tabular-nums;
-        }
-        .stats-table tbody tr {
-            transition: background 0.15s;
-        }
-        .stats-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .stats-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .stats-table .col-level {
-            font-weight: 700;
-            color: #eee;
-            width: 20%;
-        }
-        .stats-table .col-health {
-            color: #6fcf97;
-            font-weight: 500;
-            width: 40%;
-        }
-        .stats-table .col-damage {
-            color: #f28b82;
-            font-weight: 500;
-            width: 40%;
-        }
-
-        .stats-table tbody tr.row-current {
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
-        }
-        .stats-table tbody tr.row-current td {
-            font-weight: 600;
-        }
-        .stats-table .level-badge {
-            display: inline-block;
-            background: #333;
-            padding: 0 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            line-height: 1.6;
-            font-weight: 600;
-        }
-        .stats-table .level-badge.max {
-            background: #f1c40f;
-            color: #111;
-        }
-        .stats-table .level-badge.recommended {
-            background: #4a9eff;
-            color: #fff;
-        }
-
-        .section-title .toggle-btn {
-            background: transparent;
-            border: 1px solid #555;
-            color: #ccc;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .section-title .toggle-btn:hover {
-            background: #333;
-            color: #fff;
-        }
-
-        .rec-level-display {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            background: #2a2a2a;
-            padding: 4px 14px;
-            border-radius: 20px;
-            display: inline-block;
-            color: #ddd;
-        }
-        .rec-level-display strong {
-            color: #fff;
-        }
-
-        /* адаптация для телефонов */
+        .shelly-ability-row:hover { background: #2a2a2a; }
+        .shelly-ability-row img { width: 36px; height: 36px; flex-shrink: 0; border-radius: 8px; background: #2a2a2a; padding: 4px; object-fit: contain; }
+        .shelly-ability-row .ability-text { flex: 1; font-size: 0.95rem; line-height: 1.5; }
+        .shelly-ability-row .ability-label { font-weight: 600; color: #fff; }
+        .stats-table-wrap { overflow-x: auto; border-radius: 10px; background: #1a1a1a; transition: all 0.3s ease; }
+        .stats-table-wrap.collapsed { display: none; }
+        .stats-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 220px; }
+        .stats-table thead th { background: #2a2a2a; color: #aaa; font-weight: 600; padding: 10px 12px; text-align: center; border-bottom: 2px solid #3a3a3a; font-size: 0.85rem; letter-spacing: 0.3px; text-transform: uppercase; }
+        .stats-table tbody td { padding: 8px 12px; text-align: center; border-bottom: 1px solid #2a2a2a; transition: background 0.15s; font-variant-numeric: tabular-nums; }
+        .stats-table tbody tr:hover { background: rgba(255,255,255,0.04); }
+        .stats-table tbody tr:last-child td { border-bottom: none; }
+        .stats-table .col-level { font-weight: 700; color: #eee; width: 20%; }
+        .stats-table .col-health { color: #6fcf97; font-weight: 500; width: 40%; }
+        .stats-table .col-damage { color: #f28b82; font-weight: 500; width: 40%; }
+        .stats-table tbody tr.row-current { background: rgba(255,255,255,0.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15); }
+        .stats-table tbody tr.row-current td { font-weight: 600; }
+        .stats-table .level-badge { display: inline-block; background: #333; padding: 0 10px; border-radius: 12px; font-size: 0.8rem; line-height: 1.6; font-weight: 600; }
+        .stats-table .level-badge.max { background: #f1c40f; color: #111; }
+        .stats-table .level-badge.recommended { background: #4a9eff; color: #fff; }
+        .section-title .toggle-btn { background: transparent; border: 1px solid #555; color: #ccc; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
+        .section-title .toggle-btn:hover { background: #333; color: #fff; }
+        .rec-level-display { margin-top: 10px; font-size: 0.9rem; background: #2a2a2a; padding: 4px 14px; border-radius: 20px; display: inline-block; color: #ddd; }
+        .rec-level-display strong { color: #fff; }
         @media (max-width: 500px) {
-            .stats-table {
-                font-size: 0.8rem;
-            }
-            .stats-table thead th,
-            .stats-table tbody td {
-                padding: 6px 8px;
-            }
-            .stats-table .col-level {
-                width: 18%;
-            }
-            .stats-table .col-health,
-            .stats-table .col-damage {
-                width: 41%;
-            }
+            .stats-table { font-size: 0.8rem; }
+            .stats-table thead th, .stats-table tbody td { padding: 6px 8px; }
+            .stats-table .col-level { width: 18%; }
+            .stats-table .col-health, .stats-table .col-damage { width: 41%; }
         }
+        .shelly-mode-row { display: flex; gap: 12px; flex-wrap: wrap; padding: 4px 0; }
+        .shelly-mode-row span { background: #2a2a2a; padding: 2px 12px; border-radius: 20px; font-size: 0.95rem; }
+        .shelly-skin-item { background: #2a2a2a; padding: 4px 12px; border-radius: 20px; display: inline-block; margin: 2px 6px 2px 0; font-size: 0.9rem; }
+        .shelly-verdict-grid { display: flex; flex-wrap: wrap; gap: 8px 24px; background: #1e1e1e; padding: 8px 12px; border-radius: 10px; }
+        .shelly-verdict-grid .vd-item { display: flex; align-items: baseline; gap: 4px; }
+        .shelly-verdict-grid .vd-label { color: #aaa; font-size: 0.9rem; }
+        .shelly-verdict-grid .vd-value { font-weight: 500; }
+        .shelly-class-badge { font-weight: 700; }
+        .shelly-sub { opacity: 0.75; font-size: 0.9rem; margin-top: -4px; }
+        .shelly-matchup-grid { display: flex; flex-wrap: wrap; gap: 8px 20px; background: #1e1e1e; padding: 8px 12px; border-radius: 10px; }
+        .shelly-matchup-grid .mu-item { display: flex; align-items: baseline; gap: 4px; }
+        .shelly-matchup-grid .mu-label { color: #aaa; font-size: 0.9rem; }
+        .shelly-matchup-grid .mu-value { font-weight: 500; }
+        .viewer-panel .section-content { background: #232323; box-shadow: inset 0 1px 2px rgba(255,255,255,0.03); }
+        .viewer-panel .section-title { color: #ddd; letter-spacing: 0.3px; }
+        .brawler-rarity { background: #444; padding: 4px 16px; border-radius: 24px; font-weight: 500; }
+        #tipsText { white-space: pre-wrap; }
 
-        .shelly-mode-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            padding: 4px 0;
+        /* Промокоды */
+        .promo-item {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+            padding: 10px 10px; background: #1e1e1e; border-radius: 10px; margin-bottom: 8px;
         }
-        .shelly-mode-row span {
-            background: #2a2a2a;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 0.95rem;
+        .promo-item .promo-code { font-weight: 700; font-size: 1.1rem; min-width: 120px; }
+        .promo-item .promo-desc { color: #aaa; font-size: 0.8rem; }
+        .promo-item .promo-expiry { color: #777; font-size: 0.7rem; min-width: 80px; }
+        .copy-promo-btn {
+            background: #2a2a2a; border: none; color: #ccc;
+            padding: 4px 12px; border-radius: 8px; cursor: pointer;
+            font-size: 0.8rem; transition: 0.2s;
+            margin-left: auto;
         }
-        .shelly-skin-item {
-            background: #2a2a2a;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin: 2px 6px 2px 0;
-            font-size: 0.9rem;
-        }
-        .shelly-verdict-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 24px;
-            background: #1e1e1e;
-            padding: 8px 12px;
-            border-radius: 10px;
-        }
-        .shelly-verdict-grid .vd-item {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-        }
-        .shelly-verdict-grid .vd-label {
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-        .shelly-verdict-grid .vd-value {
-            font-weight: 500;
-        }
-        .shelly-class-badge {
-            font-weight: 700;
-        }
-        .shelly-sub {
-            opacity: 0.75;
-            font-size: 0.9rem;
-            margin-top: -4px;
-        }
-        .shelly-matchup-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 20px;
-            background: #1e1e1e;
-            padding: 8px 12px;
-            border-radius: 10px;
-        }
-        .shelly-matchup-grid .mu-item {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
-        }
-        .shelly-matchup-grid .mu-label {
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-        .shelly-matchup-grid .mu-value {
-            font-weight: 500;
-        }
-        .viewer-panel .section-content {
-            background: #232323;
-            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.03);
-        }
-        .viewer-panel .section-title {
-            color: #ddd;
-            letter-spacing: 0.3px;
-        }
-        .brawler-rarity {
-            background: #444;
-            padding: 4px 16px;
-            border-radius: 24px;
-            font-weight: 500;
-        }
-        #tipsText {
-            white-space: pre-wrap;
-        }
+        .copy-promo-btn:hover { background: #3a3a3a; color: #fff; }
+        .copy-promo-btn.copied { background: #1f8b4c; color: #fff; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="tab3">
-                <img src="logo.png" alt="📋" style="width:41px; height:22px; border-radius:1px; vertical-align:middle; margin-right:3px;">
-                Об игре
-            </button>
-            <button class="tab-btn" data-tab="tab1">📊 Калькулятор</button>
-            <button class="tab-btn" data-tab="tab2">
-                <img src="logo1.png" alt="🥊" style="width:34px; height:20px; border-radius:1px; vertical-align:middle; margin-right:3px;">
-                Бойцы
-            </button>
-        </div>
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab3">
+            <img src="logo.png" alt="📋" style="width:41px; height:22px; border-radius:1px; vertical-align:middle; margin-right:3px;">
+            Об игре
+        </button>
+        <button class="tab-btn" data-tab="tab1">📊 Калькулятор</button>
+        <button class="tab-btn" data-tab="tab2">
+            <img src="logo1.png" alt="🥊" style="width:34px; height:20px; border-radius:1px; vertical-align:middle; margin-right:3px;">
+            Бойцы
+        </button>
+        <button class="tab-btn" data-tab="tab4">🎁 Промокоды</button>
+    </div>
 
-        <!-- ========== Вкладка 3: Общее ========== -->
-        <div id="tab3" class="tab-content active">
-            <h2>Об игре «Битва Старр»</h2>
-            <div class="info-block">
-                <ul>
-                    <li>• Игра была сделана на движке Unity</li>
-                    <li>• Дата выхода - 24.11.2024 (24 ноября 2024 года)</li>
-                </ul>
-                <h3>На данный момент в игре:</h3>
-                <ul>
-                    <li>• 74 бойца</li>
-                    <li>• 95 иконок</li>
-                    <li>• 54 скина</li>
-                    <li>• 20 гаджетов</li>
-                    <li>• 12 режимов</li>
-                    <li>• 1.000.000+ игроков посетивших игру</li>
-                    <li>• 25 выпущенных обновлений</li>
-                    <li>• Только 7 игроков, достигшив 1м трофеев</li>
-                </ul>
-            </div>
-            <div class="info-block">
-                <h3>🔗 Ссылки по игре «Битва Старр»</h3>
-                <ul>
-                    <li>• <a href="https://yandex.ru/games/app/387326" target="_blank">Ссылка на игру</a></li>
-                    <li>• <a href="https://yandex.ru/games/app/387326?draft=true" target="_blank"> Бета-версия игры</a> (Неактивна)</li>
-                    <li>• Телеграмм канал разработчика: <a href="https://t.me/brawlstarryndx" target="_blank">EshackGames - Яндекс Игры</a></li>
-                </ul>
-            </div>
-            <div class="info-block">
-                <h3>Сайт сделан каналом <a href="https://t.me/BitvaStarrNews" target="_blank">Битва Старр | Новости</a></h3>
-            </div>
+    <!-- Вкладка 3: Об игре -->
+    <div id="tab3" class="tab-content active">
+        <h2>Об игре «Битва Старр»</h2>
+        <div class="info-block">
+            <ul>
+                <li>• Игра была сделана на движке Unity</li>
+                <li>• Дата выхода - 24.11.2024 (24 ноября 2024 года)</li>
+            </ul>
+            <h3>На данный момент в игре:</h3>
+            <ul>
+                <li>• 74 бойца</li>
+                <li>• 95 иконок</li>
+                <li>• 54 скина</li>
+                <li>• 20 гаджетов</li>
+                <li>• 12 режимов</li>
+                <li>• 1.000.000+ игроков посетивших игру</li>
+                <li>• 25 выпущенных обновлений</li>
+                <li>• Только 7 игроков, достигшив 1м трофеев</li>
+            </ul>
         </div>
-
-        <!-- ========== Вкладка 1: Калькулятор ========== -->
-        <div id="tab1" class="tab-content">
-            <h2>Калькулятор силы</h2>
-            <label class="calc-label">Здоровье на уровне:</label>
-            <input class="calc-input" type="number" id="hp" placeholder="Например: 5600">
-            <label class="calc-label">Урон на уровне:</label>
-            <input class="calc-input" type="number" id="dmg" placeholder="Например: 800">
-            <label class="calc-label">Уровень силы (1–11):</label>
-            <input class="calc-input" type="number" id="lvl" min="1" max="11" placeholder="Например: 11">
-            <button class="calc-btn" onclick="calculate()">Рассчитать</button>
-            <div id="result" class="result"></div>
-            <button id="copyBtn" onclick="copyResult()" style="display:none; margin-top:10px; width:100%; padding:12px; border-radius:12px; border:none; font-weight:600; background:#2a2a2a; color:#fff; cursor:pointer;">
-                Скопировать результат
-            </button>
+        <div class="info-block">
+            <h3>🔗 Ссылки по игре «Битва Старр»</h3>
+            <ul>
+                <li>• <a href="https://yandex.ru/games/app/387326" target="_blank">Ссылка на игру</a></li>
+                <li>• <a href="https://yandex.ru/games/app/387326?draft=true" target="_blank"> Бета-версия игры</a> (Неактивна)</li>
+                <li>• Телеграмм канал разработчика: <a href="https://t.me/brawlstarryndx" target="_blank">EshackGames - Яндекс Игры</a></li>
+            </ul>
         </div>
+        <div class="info-block">
+            <h3>Сайт сделан каналом <a href="https://t.me/BitvaStarrNews" target="_blank">Битва Старр | Новости</a></h3>
+        </div>
+    </div>
 
-        <!-- ========== Вкладка 2: Бойцы ========== -->
-        <div id="tab2" class="tab-content">
-            <div id="brawlersList">
-                <div class="brawlers-header">
-                    <h2>Информация о бойцах</h2>
-                </div>
-                <div class="controls">
-                    <input type="text" id="searchInput" placeholder="🔍 Поиск по имени..." />
-                    <select id="sortSelect">
-                        <option value="rarity">Редкость</option>
-                        <option value="order">Дата выхода</option>
-                        <option value="difficulty">Сложность (от 1 до 10)</option>
-                        <option value="worth">Стоит апать (сначала Да)</option>
+    <!-- Вкладка 1: Калькулятор -->
+    <div id="tab1" class="tab-content">
+        <h2>Калькулятор силы</h2>
+        <label class="calc-label">Здоровье на уровне:</label>
+        <input class="calc-input" type="number" id="hp" placeholder="Например: 5600">
+        <label class="calc-label">Урон на уровне:</label>
+        <input class="calc-input" type="number" id="dmg" placeholder="Например: 800">
+        <label class="calc-label">Уровень силы (1–11):</label>
+        <input class="calc-input" type="number" id="lvl" min="1" max="11" placeholder="Например: 11">
+        <button class="calc-btn" onclick="calculate()">Рассчитать</button>
+        <div id="result" class="result"></div>
+        <button id="copyBtn" onclick="copyResult()" style="display:none; margin-top:10px; width:100%; padding:12px; border-radius:12px; border:none; font-weight:600; background:#2a2a2a; color:#fff; cursor:pointer;">
+            Скопировать результат
+        </button>
+    </div>
+
+    <!-- Вкладка 2: Бойцы -->
+    <div id="tab2" class="tab-content">
+        <div id="brawlersList">
+            <div class="brawlers-header"><h2>Информация о бойцах</h2></div>
+            <div class="controls">
+                <input type="text" id="searchInput" placeholder="🔍 Поиск по имени..." />
+                <select id="sortSelect">
+                    <option value="rarity">Редкость</option>
+                    <option value="order">Дата выхода</option>
+                    <option value="difficulty">Сложность (от 1 до 10)</option>
+                    <option value="worth">Стоит апать (сначала Да)</option>
+                </select>
+            </div>
+            <div class="filter-row">
+                <label>Гаджет:
+                    <select id="filterGadget">
+                        <option value="all">Все</option>
+                        <option value="yes">Есть</option>
+                        <option value="no">Нет</option>
                     </select>
-                </div>
-                <div class="filter-row">
-                    <label>Гаджет:
-                        <select id="filterGadget">
-                            <option value="all">Все</option>
-                            <option value="yes">Есть</option>
-                            <option value="no">Нет</option>
-                        </select>
-                    </label>
-                    <label>Стоит апать?
-                        <select id="filterWorth">
-                            <option value="all">Все</option>
-                            <option value="Да">Да</option>
-                            <option value="Нет">Нет</option>
-                            <option value="Возможно">Возможно</option>
-                        </select>
-                    </label>
-                </div>
-                <div id="brawlersGrid" class="brawlers-grid"></div>
+                </label>
+                <label>Стоит апать?
+                    <select id="filterWorth">
+                        <option value="all">Все</option>
+                        <option value="Да">Да</option>
+                        <option value="Нет">Нет</option>
+                        <option value="Возможно">Возможно</option>
+                    </select>
+                </label>
+                <label>Класс:
+                    <select id="filterClass">
+                        <option value="all">Все</option>
+                        <option value="Танк">Танк</option>
+                        <option value="Убийца">Убийца</option>
+                        <option value="Поддержка">Поддержка</option>
+                        <option value="Контроль">Контроль</option>
+                        <option value="Урон">Урон</option>
+                        <option value="Стрелок">Стрелок</option>
+                        <option value="Артиллерия">Артиллерия</option>
+                    </select>
+                </label>
             </div>
+            <div id="brawlersGrid" class="brawlers-grid"></div>
+        </div>
 
-            <!-- ===== ПАНЕЛЬ БОЙЦА (динамическая) ===== -->
-            <div id="viewerPanel" class="viewer-panel">
-                <div class="brawler-name" id="viewName"></div>
-                <div class="brawler-rarity" id="viewRarity"></div>
-
-                <div class="section">
-                    <div class="section-title">Общая информация</div>
-                    <div class="section-content" id="viewGeneral" style="white-space:normal;"></div>
+        <!-- Панель бойца -->
+        <div id="viewerPanel" class="viewer-panel">
+            <div class="brawler-name" id="viewName"></div>
+            <div class="brawler-rarity" id="viewRarity"></div>
+            <div class="section">
+                <div class="section-title">Общая информация</div>
+                <div class="section-content" id="viewGeneral" style="white-space:normal;"></div>
+            </div>
+            <div class="section">
+                <div class="section-title" id="statsTitle">
+                    <span>Здоровье / Урон по уровням</span>
+                    <button class="toggle-btn" id="statsToggleBtn" onclick="toggleStatsTable()">Свернуть</button>
                 </div>
-
-                <!-- ===== УПРОЩЁННАЯ ТАБЛИЦА СТАТОВ ===== -->
-                <div class="section">
-                    <div class="section-title" id="statsTitle">
-                        <span>Здоровье / Урон по уровням</span>
-                        <button class="toggle-btn" id="statsToggleBtn" onclick="toggleStatsTable()">Свернуть</button>
-                    </div>
-                    <div class="section-content" style="white-space:normal; padding:6px 8px;">
-                        <div class="stats-table-wrap" id="statsTableWrap"></div>
-                        <div id="recLevelDisplay" class="rec-level-display"></div>
-                    </div>
+                <div class="section-content" style="white-space:normal; padding:6px 8px;">
+                    <div class="stats-table-wrap" id="statsTableWrap"></div>
+                    <div id="recLevelDisplay" class="rec-level-display"></div>
                 </div>
-
-                <div class="section">
-                    <div class="section-title">Основные способности</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div class="shelly-ability-row">
-                            <img src="logo2.png" alt="Атака" />
-                            <div class="ability-text">
-                                <span class="ability-label">Атака:</span>
-                                <span id="viewAttack"></span>
-                            </div>
-                        </div>
-                        <div class="shelly-ability-row">
-                            <img src="logo3.png" alt="Супер" />
-                            <div class="ability-text">
-                                <span class="ability-label">Супер:</span>
-                                <span id="viewSuper"></span>
-                            </div>
-                        </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Основные способности</div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;">
+                    <div class="shelly-ability-row">
+                        <img src="logo2.png" alt="Атака" />
+                        <div class="ability-text"><span class="ability-label">Атака:</span> <span id="viewAttack"></span></div>
+                    </div>
+                    <div class="shelly-ability-row">
+                        <img src="logo3.png" alt="Супер" />
+                        <div class="ability-text"><span class="ability-label">Супер:</span> <span id="viewSuper"></span></div>
                     </div>
                 </div>
-
-                <!-- Секция с гаджетом -->
-                <div class="section" id="gadgetSection">
-                    <div class="section-title">Усиления</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div class="shelly-ability-row">
-                            <img src="logo4.png" alt="Гаджет" />
-                            <div class="ability-text">
-                                <span class="ability-label">Гаджет:</span>
-                                <span id="viewGadget"></span>
-                            </div>
-                        </div>
+            </div>
+            <div class="section" id="gadgetSection">
+                <div class="section-title">Усиления</div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;">
+                    <div class="shelly-ability-row">
+                        <img src="logo4.png" alt="Гаджет" />
+                        <div class="ability-text"><span class="ability-label">Гаджет:</span> <span id="viewGadget"></span></div>
                     </div>
                 </div>
-
-                <div class="section">
-                    <div class="section-title">Советы использования</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <span id="tipsText"></span>
+            </div>
+            <div class="section">
+                <div class="section-title">Советы использования</div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;"><span id="tipsText"></span></div>
+            </div>
+            <div class="section">
+                <div class="section-title">Матчапы</div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;">
+                    <div class="shelly-matchup-grid">
+                        <span class="mu-item"><span class="mu-label">Хорош против:</span> <span class="mu-value" id="goodMatchup"></span></span>
+                        <span class="mu-item"><span class="mu-label">Плох против:</span> <span class="mu-value" id="badMatchup"></span></span>
                     </div>
                 </div>
-
-                <div class="section">
-                    <div class="section-title">Матчапы</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div class="shelly-matchup-grid" id="matchupGrid">
-                            <span class="mu-item"><span class="mu-label">Хорош против:</span> <span class="mu-value" id="goodMatchup"></span></span>
-                            <span class="mu-item"><span class="mu-label">Плох против:</span> <span class="mu-value" id="badMatchup"></span></span>
-                        </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Лучшие режимы</div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;">
+                    <div class="shelly-mode-row">
+                        <span>🥇 <span id="mode1"></span></span>
+                        <span>🥈 <span id="mode2"></span></span>
+                        <span>🥉 <span id="mode3"></span></span>
                     </div>
                 </div>
-
-                <div class="section">
-                    <div class="section-title">Лучшие режимы</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div class="shelly-mode-row" id="modesRow">
-                            <span>🥇 <span id="mode1"></span></span>
-                            <span>🥈 <span id="mode2"></span></span>
-                            <span>🥉 <span id="mode3"></span></span>
-                        </div>
+            </div>
+            <div class="section">
+                <div class="section-title">Комбинация способностей</div>
+                <div class="section-content" id="viewBuild" style="white-space:normal;"><span id="buildText"></span></div>
+            </div>
+            <div class="section">
+                <div class="section-title">Скины <span id="skinCountLabel"></span></div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;"><div id="skinList"></div></div>
+            </div>
+            <div class="section">
+                <div class="section-title">Моё мнение</div>
+                <div class="section-content" style="white-space:normal; padding:6px 12px;">
+                    <div class="shelly-verdict-grid">
+                        <span class="vd-item"><span class="vd-label">Мнение:</span> <span class="vd-value" id="opinionText"></span></span>
+                        <span class="vd-item"><span class="vd-label">Сложность:</span> <span class="vd-value" id="difficultyText"></span></span>
+                        <span class="vd-item"><span class="vd-label">Стоит апать?:</span> <span class="vd-value" id="worthText"></span></span>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="section">
-                    <div class="section-title">Комбинация способностей</div>
-                    <div class="section-content" id="viewBuild" style="white-space:normal;">
-                        <span id="buildText"></span>
-                    </div>
-                </div>
+    <!-- Вкладка 4: Промокоды -->
+    <div id="tab4" class="tab-content">
+        <h2>Активные промокоды</h2>
+        <div id="promoList" class="result" style="max-height:400px;"></div>
+    </div>
+</div>
 
-                <div class="section">
-                    <div class="section-title">Скины <span id="skinCountLabel"></span></div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div id="skinList"></div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <div class="section-title">Моё мнение</div>
-                    <div class="section-content" style="white-space:normal; padding:6px 12px;">
-                        <div class="shelly-verdict-grid">
-                            <span class="vd-item"><span class="vd-label">Мнение:</span> <span class="vd-value" id="opinionText"></span></span>
-                            <span class="vd-item"><span class="vd-label">Сложность:</span> <span class="vd-value" id="difficultyText"></span></span>
-                            <span class="vd-item"><span class="vd-label">Стоит апать?:</span> <span class="vd-value" id="worthText"></span></span>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- /viewerPanel -->
-        </div><!-- /tab2 -->
-
-    </div><!-- /container -->
-
-    <script>
-
-        const defaultBrawlers = [{
+<script>
+    // ---------- ДАННЫЕ БОЙЦОВ ----------
+         const defaultBrawlers = [{
                 id: 1,
                 name: "Шелли",
                 rarity: "Обычный",
@@ -1623,7 +1121,7 @@
                 classLabel: "Убийца",
                 generalNote: "из ящика",
                 stats: "1 - 3200 здоровья / 750 урона\n2 - 3520 здоровья / 825 урона\n3 - 3840 здоровья / 900 урона\n4 - 4160 здоровья / 975 урона\n5 - 4480 здоровья / 1050 урона\n6 - 4800 здоровья / 1125 урона\n7 - 5120 здоровья / 1200 урона\n8 - 5440 здоровья / 1275 урона\n9 - 5760 здоровья / 1350 урона\n10 - 6080 здоровья / 1425 урона\n11 - 6400 здоровья / 1500 урона",
-                attackDesc: " Грибы - Садовый инструмент Корделиуса стреляет двумя грибами, которые наносят урон при попадании в противника.",
+                attackDesc: "Грибы - Садовый инструмент Корделиуса стреляет двумя грибами, которые наносят урон при попадании в противника.",
                 superDesc: "Царство теней - Корделиус выпускает 6 грибов которые наносят урон при попадании во врага.",
                 gadgetDesc: "-",
                 tips: "- Играется на закрытых картах\n- Супер Корделиуса имеет самонаводку\n- Играй на максимальной дитсанции от врага",
@@ -1640,400 +1138,496 @@
                 worthUpgrading: "Возможно",
                 hasGadget: false,
                 recommendedLevel: 7
+        }, {
+                id: 29,
+                name: "Сту",
+                rarity: "Эпический",
+                classLabel: "Убийца",
+                generalNote: "из ящика",
+                stats: "1 - 3200 здоровья / 700 урона\n2 - 3520 здоровья / 770 урона\n3 - 3840 здоровья / 840 урона\n4 - 4160 здоровья / 910 урона\n5 - 4480 здоровья / 980 урона\n6 - 4800 здоровья / 1050 урона\n7 - 5120 здоровья / 1120 урона\n8 - 5440 здоровья / 1190 урона\n9 - 5760 здоровья / 1260 урона\n10 - 6080 здоровья / 1330 урона\n11 - 6400 здоровья / 1400 урона",
+                attackDesc: "Спецэффекты - Сту стреляет двумя петардами, которые наносят нешуточный урон.",
+                superDesc: "Нитроускорение - Небольшой рывок вперёд, оставляющий за собой след из горящей резины, которая поджигает любого врага, наступившего в неё.",
+                gadgetDesc: "-",
+                tips: "- Играется на закрытых картах\n- Супер копится с одной тычки\n- Держи максимальную дистанцию от врага",
+                goodMatchup: "Поддержка, Стрелок (Такие как Поко, Брок или Пайпер)",
+                badMatchup: "Контроль, Урон (Такие как Зигги, Сириус или Честер)",
+                mode1: "Столкновение",
+                mode2: "Нокаут",
+                mode3: "Броулбол",
+                buildDesc: "1. +1 жизнь, Щит: Лучшая сборка снаряжений для Сту",
+                skinList: ["Обычный - Бесплатно", "Санта Сту - _ Кристаллов."],
+                skinCount: 2,
+                opinion: "Боец хорошо играется засчёт супера",
+                difficulty: 6,
+                worthUpgrading: "Возможно",
+                hasGadget: false,
+                recommendedLevel: 9
+        }, {
+                id: 30,
+                name: "Спайк",
+                rarity: "Легендарный",
+                classLabel: "Урон",
+                generalNote: "из ящика",
+                stats: "1 - 2800 здоровья / 540 урона\n2 - 3080 здоровья / 594 урона\n3 - 3360 здоровья / 648 урона\n4 - 3640 здоровья / 702 урона\n5 - 3920 здоровья / 756 урона\n6 - 4200 здоровья / 810 урона\n7 - 4480 здоровья / 864 урона\n8 - 4760 здоровья / 918 урона\n9 - 5040 здоровья / 972 урона\n10 - 5320 здоровья / 1026 урона\n11 - 5600 здоровья / 1080 урона",
+                attackDesc: "Иголочная граната - Спайк бросает маленький кактус, который взрывается и осыпает всё вокруг иголками.",
+                superDesc: "Колючий сад - Спайк бросает шипастую гранату, которая наносит урон и замедляет врагов, попавших в зону взрыва.",
+                gadgetDesc: "Игольница - Спайк 3 р. стреляет во все стороны иголками, каждая из которых наносит 1080 ед. урона. (Перезарядка 17 сек)",
+                tips: "- Играется на открытых и закрытых картах\n- Супером можно задержать врага\n- Колючки помогают играть и на дальнем и на блинем расстоянии",
+                goodMatchup: "Танк, Урон (Такие как Дэрилл, Кадзэ или Шелли)",
+                badMatchup: "Убийца, Артиллерия (Такие как Мико, Алли или Гром)",
+                mode1: "Горячая зона",
+                mode2: "Ограбление",
+                mode3: "Столкновение",
+                buildDesc: "1. +1 жизнь, Перезарядка: Лучшая сборка снаряжений для Спайка",
+                skinList: ["Обычный - Бесплатно", "Мультяшка Спайк - _ Кристаллов.", "Бревновогодний Спайк - _ Кристаллов."],
+                skinCount: 3,
+                opinion: "Боец хорошо держит зону",
+                difficulty: 4,
+                worthUpgrading: "Да",
+                hasGadget: true,
+                recommendedLevel: 5
+        }, {
+                id: 31,
+                name: "Базз Лайтер (Лазер)",
+                rarity: "Ивентовый",
+                classLabel: "Урон",
+                generalNote: "Ивентовый",
+                stats: "1 - 3000 здоровья / 1000 урона\n2 - 3300 здоровья / 1100 урона\n3 - 3600 здоровья / 1200 урона\n4 - 3900 здоровья / 1300 урона\n5 - 4200 здоровья / 1400 урона\n6 - 4500 здоровья / 1500 урона\n7 - 4800 здоровья / 1600 урона\n8 - 5100 здоровья / 1700 урона\n9 - 5400 здоровья / 1800 урона\n10 - 5700 здоровья / 1900 урона\n11 - 6000 здоровья / 2000 урона",
+                attackDesc: "Космобластер - Базз Лайтер стреляет лазером, который наносит урон и поджигает противников.",
+                superDesc: "Космобластер - Базз Лайтер делает лазерный залп, который наносит урон и поджигает противников.",
+                gadgetDesc: "-",
+                tips: "- Играется на открытых картах и от стен\n- Играй на средней дистанции от врага\n- Супером можно нанести много уорна",
+                goodMatchup: "Танк, Артиллерия (Такие как Эль Примо, Ларри и Лори или Динамайк)",
+                badMatchup: "Убийца, Контроль (Такие как Кадзэ, Грифф или Эмз)",
+                mode1: "Дуэли",
+                mode2: "Ограбление",
+                mode3: "Столкновение",
+                buildDesc: "1. +1 жизнь, Щит: Лучшая сборка снаряжений для Базз Лайтера",
+                skinList: ["Обычный - Бесплатно"],
+                skinCount: 1,
+                opinion: "Боец хорошо наносит урон",
+                difficulty: 5,
+                worthUpgrading: "Нет",
+                hasGadget: false,
+                recommendedLevel: 7
+        }, {
+                id: 32,
+                name: "Базз Лайтер (Меч)",
+                rarity: "Ивентовый",
+                classLabel: "Урон",
+                generalNote: "Ивентовый",
+                stats: "1 - 4200 здоровья / 1200 урона\n2 - 4620 здоровья / 1320 урона\n3 - 5040 здоровья / 1440 урона\n4 - 5460 здоровья / 1560 урона\n5 - 5880 здоровья / 1680 урона\n6 - 6300 здоровья / 1800 урона\n7 - 6720 здоровья / 1920 урона\n8 - 7140 здоровья / 2040 урона\n9 - 7560 здоровья / 2160 урона\n10 - 7980 здоровья / 2280 урона\n11 - 8400 здоровья / 2400 урона",
+                attackDesc: "Астромеч - Базз Лайтер делает удар мечом, нанося большой урон в ближнем бою.",
+                superDesc: "Астромеч - Базз Лайтер взмывает в воздух и резко пикирует вниз.",
+                gadgetDesc: "-",
+                tips: "- Играется на открытых картах и от стен\n- Используй супер на средней/максимальной дистанции\n- Старайся супером лететь в кучу игроков",
+                goodMatchup: "Поддержка, Урон (Такие как Макс, Байрон или Тара)",
+                badMatchup: "Танк, Убийца (Такие как Роза, Шэйд или Кэндзи)",
+                mode1: "Столкновение",
+                mode2: "Горячая зона",
+                mode3: "Захват Кристаллов",
+                buildDesc: "1. +1 жизнь, Щит: Лучшая сборка снаряжений для Базз Лайтера",
+                skinList: ["Обычный - Бесплатно"],
+                skinCount: 1,
+                opinion: "Боец хорошо нападает в кучу",
+                difficulty: 6,
+                worthUpgrading: "Возможно",
+                hasGadget: false,
+                recommendedLevel: 9
+        }, {
+                id: 33,
+                name: "Базз Лайтер (Крылья)",
+                rarity: "Ивентовый",
+                classLabel: "Урон",
+                generalNote: "Ивентовый",
+                stats: "1 - 3600 здоровья / 800 урона\n2 - 3960 здоровья / 880 урона\n3 - 4320 здоровья / 960 урона\n4 - 4680 здоровья / 1040 урона\n5 - 5040 здоровья / 1120 урона\n6 - 5400 здоровья / 1200 урона\n7 - 5760 здоровья / 1280 урона\n8 - 6120 здоровья / 1360 урона\n9 - 6480 здоровья / 1440 урона\n10 - 6840 здоровья / 1520 урона\n11 - 7200 здоровья / 1600 урона",
+                attackDesc: "Галактический залп - Базз Лайтер делает два выстрела нанося урон.",
+                superDesc: "Галактический залп - Базз Лайтер взмывает в воздух и пикирует вниз, атакуя противников во время движения.",
+                gadgetDesc: "-",
+                tips: "- Играется на закрытых картах\n- Используй супер чтобы добить врага или убежать\n- Играй на ближней дистанции",
+                goodMatchup: "Танк, Стрелок (Такие как Дэрилл, Пирс или Мэнди)",
+                badMatchup: "Убийца, Артиллерия (Такие как Гром, Мелоди или Леон)",
+                mode1: "Дуэли",
+                mode2: "Броулбол",
+                mode3: "Ограбление",
+                buildDesc: "1. +1 жизнь, Перезарядка: Лучшая сборка снаряжений для Базз Лайтера",
+                skinList: ["Обычный - Бесплатно"],
+                skinCount: 1,
+                opinion: "Боец хорошо играет с командой",
+                difficulty: 5,
+                worthUpgrading: "Возможно",
+                hasGadget: false,
+                recommendedLevel: 5
         }];
 
-        let brawlers = defaultBrawlers;
-        let filters = {
-            gadget: 'all',
-            worth: 'all'
-        };
+    // ---------- ПРОМОКОДЫ ----------
+    const promoCodes = [
+        { code: "PFfQWC3QVZ", expiry: "???", description: "200 кристаллов" },
+        { code: "htw2ipWTsY", expiry: "???", description: "5000 Монет, 150 Кристаллов и 1000 Очков Силы" }
+    ];
 
-        // ===== Вспомогательные функции =====
-        function pluralizeSkin(count) {
-            if (count === 0) return '0 скинов';
-            if (count === 1) return '1 скин';
-            if (count >= 2 && count <= 4) return count + ' скина';
-            return count + ' скинов';
+    let brawlers = defaultBrawlers;
+    let filters = { gadget: 'all', worth: 'all', class: 'all' };
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    function escapeRegExp(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+    function pluralizeSkin(count) {
+        if (count === 0) return '0 скинов';
+        if (count === 1) return '1 скин';
+        if (count >= 2 && count <= 4) return count + ' скина';
+        return count + ' скинов';
+    }
+
+    // Фильтрация и сортировка бойцов
+    function getFilteredBrawlers() {
+        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        const sortBy = document.getElementById('sortSelect').value;
+        let filtered = brawlers.filter(b => {
+            if (!b.name.toLowerCase().includes(searchTerm)) return false;
+            if (filters.gadget === 'yes' && !b.hasGadget) return false;
+            if (filters.gadget === 'no' && b.hasGadget) return false;
+            if (filters.worth !== 'all' && b.worthUpgrading !== filters.worth) return false;
+            if (filters.class !== 'all' && b.classLabel !== filters.class) return false;
+            return true;
+        });
+        if (sortBy === 'rarity') {
+            const rarityOrder = { 'Обычный':1, 'Редкий':2, 'Сверхредкий':3, 'Эпический':4, 'Мифический':5, 'Легендарный':6, 'Ультралегендарный':7, 'Ивентовый':8 };
+            filtered.sort((a,b) => (rarityOrder[a.rarity]||99) - (rarityOrder[b.rarity]||99));
+        } else if (sortBy === 'difficulty') {
+            filtered.sort((a,b) => a.difficulty - b.difficulty);
+        } else if (sortBy === 'worth') {
+            const worthOrder = { 'Да':1, 'Возможно':2, 'Нет':3 };
+            filtered.sort((a,b) => (worthOrder[a.worthUpgrading]||4) - (worthOrder[b.worthUpgrading]||4));
+        } else {
+            // по умолчанию — порядок по id (дата выхода)
+            filtered.sort((a,b) => a.id - b.id);
         }
+        return filtered;
+    }
 
-        function getFilteredBrawlers() {
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            const sortBy = document.getElementById('sortSelect').value;
-
-            let filtered = brawlers.filter(b => {
-                if (!b.name.toLowerCase().includes(searchTerm)) return false;
-                if (filters.gadget === 'yes' && !b.hasGadget) return false;
-                if (filters.gadget === 'no' && b.hasGadget) return false;
-                if (filters.worth !== 'all' && b.worthUpgrading !== filters.worth) return false;
-                return true;
-            });
-
-            if (sortBy === 'rarity') {
-                const rarityOrder = {
-                    'Обычный': 1,
-                    'Редкий': 2,
-                    'Сверхредкий': 3,
-                    'Эпический': 4,
-                    'Мифический': 5,
-                    'Легендарный': 6,
-                    'Ультралегендарный': 7,
-                    'Временный': 8
-                };
-                filtered.sort((a, b) => (rarityOrder[a.rarity] || 99) - (rarityOrder[b.rarity] || 99));
-            } else if (sortBy === 'difficulty') {
-                filtered.sort((a, b) => a.difficulty - b.difficulty);
-            } else if (sortBy === 'worth') {
-                const worthOrder = { 'Да': 1, 'Возможно': 2, 'Нет': 3 };
-                filtered.sort((a, b) => (worthOrder[a.worthUpgrading] || 4) - (worthOrder[b.worthUpgrading] || 4));
-            } else {
-                filtered.sort((a, b) => a.id - b.id);
+    function renderBrawlers() {
+        const grid = document.getElementById("brawlersGrid");
+        const list = getFilteredBrawlers();
+        const sortBy = document.getElementById('sortSelect').value;
+        if (!list || list.length === 0) {
+            grid.innerHTML = `<div class="empty-state">Бойцов не найдено..</div>`;
+            return;
+        }
+        grid.innerHTML = list.map(b => {
+            const rarityClass = "rarity-" + b.rarity.replace(/ /g, '');
+            let badgeText = '';
+            if (sortBy === 'difficulty') badgeText = b.difficulty + '/10';
+            else if (sortBy === 'worth') {
+                const emojiMap = { 'Да':'✅', 'Возможно':'➖', 'Нет':'❌' };
+                badgeText = emojiMap[b.worthUpgrading] || '❓';
             }
-            return filtered;
+            const extraHtml = badgeText ? `<span class="badge-extra">${badgeText}</span>` : '';
+            return `<div class="brawler-card ${rarityClass}" onclick="openViewer('${b.id}')">
+                ${extraHtml}
+                <div class="name">${escapeHtml(b.name)}</div>
+                <div class="rarity-badge">${b.rarity}</div>
+                <div class="meta-icons"></div>
+            </div>`;
+        }).join('');
+    }
+
+    // Просмотр бойца
+    function enrichMatchups(text) {
+        if (!text || text === "—" || text === "") return "—";
+        let result = text;
+        brawlers.forEach(b => {
+            const regex = new RegExp(escapeRegExp(b.name), "g");
+            result = result.replace(regex, `<a href="#" onclick="openViewer(${b.id}); return false;">${b.name}</a>`);
+        });
+        return result;
+    }
+
+    function renderStatsTable(statsStr, recommendedLevel) {
+        const wrap = document.getElementById('statsTableWrap');
+        if (!statsStr || statsStr.trim() === '') {
+            wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Нет данных</div>';
+            return;
         }
-
-        function renderBrawlers() {
-            const grid = document.getElementById("brawlersGrid");
-            const list = getFilteredBrawlers();
-            const sortBy = document.getElementById('sortSelect').value;
-
-            if (!list || list.length === 0) {
-                grid.innerHTML = `<div class="empty-state">Бойцов не найдено..</div>`;
-                return;
-            }
-
-            grid.innerHTML = list.map(b => {
-                const rarityClass = "rarity-" + b.rarity.replace(/ /g, '');
-                let badgeText = '';
-                if (sortBy === 'difficulty') {
-                    badgeText = b.difficulty + '/10';
-                } else if (sortBy === 'worth') {
-                    const emojiMap = { 'Да': '✅', 'Возможно': '➖', 'Нет': '❌' };
-                    badgeText = emojiMap[b.worthUpgrading] || '❓';
-                }
-                // для сортировок 'rarity' и 'order' и любых других бейдж не показываем
-                const extraHtml = badgeText ? `<span class="badge-extra">${badgeText}</span>` : '';
-                return `<div class="brawler-card ${rarityClass}" onclick="openViewer('${b.id}')">
-                    ${extraHtml}
-                    <div class="name">${escapeHtml(b.name)}</div>
-                    <div class="rarity-badge">${b.rarity}</div>
-                    <div class="meta-icons"></div>
-                </div>`;
-            }).join('');
+        const lines = statsStr.split('\n').filter(s => s.trim() !== '');
+        if (!lines.length) {
+            wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Нет данных</div>';
+            return;
         }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        const parsed = lines.map(line => {
+            const parts = line.split('-');
+            if (parts.length !== 2) return null;
+            const level = parseInt(parts[0].trim(), 10);
+            const rest = parts[1].trim();
+            const healthMatch = rest.match(/(\d+)\s*здоровья/);
+            const dmgMatch = rest.match(/(\d+)\s*урона/);
+            if (!healthMatch || !dmgMatch) return null;
+            return { level, health: parseInt(healthMatch[1], 10), damage: parseInt(dmgMatch[1], 10) };
+        }).filter(item => item !== null);
+        if (!parsed.length) {
+            wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Не удалось распарсить данные</div>';
+            return;
         }
+        let html = `<table class="stats-table"><thead><tr><th class="col-level">Уровень</th><th class="col-health">❤️ Здоровье</th><th class="col-damage">⚔️ Урон</th></tr></thead><tbody>`;
+        parsed.forEach(p => {
+            const isRecommended = (p.level >= recommendedLevel);
+            const isMax = p.level === 11;
+            const rowClass = isRecommended ? 'row-current' : '';
+            let badgeClass = 'level-badge';
+            if (isMax) badgeClass += ' max';
+            else if (isRecommended) badgeClass += ' recommended';
+            html += `<tr class="${rowClass}"><td class="col-level"><span class="${badgeClass}">${p.level}</span></td><td class="col-health">${p.health}</td><td class="col-damage">${p.damage}</td></tr>`;
+        });
+        html += `</tbody></table>`;
+        wrap.innerHTML = html;
+    }
 
-        function escapeRegExp(str) {
-            return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    let statsCollapsed = false;
+    function toggleStatsTable() {
+        const wrap = document.getElementById('statsTableWrap');
+        const btn = document.getElementById('statsToggleBtn');
+        statsCollapsed = !statsCollapsed;
+        if (statsCollapsed) { wrap.classList.add('collapsed'); btn.textContent = 'Развернуть'; }
+        else { wrap.classList.remove('collapsed'); btn.textContent = 'Свернуть'; }
+    }
+
+    function updateViewerData(brawler) {
+        if (!brawler) return;
+        document.getElementById("viewName").textContent = brawler.name;
+        document.getElementById("viewRarity").textContent = brawler.rarity;
+        const generalEl = document.getElementById("viewGeneral");
+        generalEl.innerHTML = `${brawler.name} - <strong>${brawler.rarity}</strong> боец, класса <span class="shelly-class-badge">${brawler.classLabel}</span>.<div class="shelly-sub">Способ получения: ${brawler.generalNote || ''}</div>`;
+        const recLevel = brawler.recommendedLevel || 11;
+        renderStatsTable(brawler.stats, recLevel);
+        document.getElementById("recLevelDisplay").innerHTML = `Рекомендуемый уровень: <strong>${recLevel}</strong>`;
+        document.getElementById("viewAttack").textContent = brawler.attackDesc || '';
+        document.getElementById("viewSuper").textContent = brawler.superDesc || '';
+        const gadgetSection = document.getElementById('gadgetSection');
+        if (brawler.hasGadget) {
+            gadgetSection.style.display = 'block';
+            document.getElementById('viewGadget').textContent = brawler.gadgetDesc || '';
+        } else {
+            gadgetSection.style.display = 'none';
         }
-
-        function enrichMatchups(text) {
-            if (!text || text === "—" || text === "") return "—";
-            const names = brawlers.map(b => b.name).sort((a, b) => b.length - a.length);
-            let result = text;
-            names.forEach(name => {
-                const brawler = brawlers.find(b => b.name === name);
-                if (!brawler) return;
-                const regex = new RegExp(escapeRegExp(name), "g");
-                result = result.replace(
-                    regex,
-                    `<a href="#" onclick="openViewer(${brawler.id}); return false;">${name}</a>`
-                );
-            });
-            return result;
+        document.getElementById("tipsText").textContent = brawler.tips || '';
+        document.getElementById("goodMatchup").innerHTML = enrichMatchups(brawler.goodMatchup || '');
+        document.getElementById("badMatchup").innerHTML = enrichMatchups(brawler.badMatchup || '');
+        document.getElementById("mode1").textContent = brawler.mode1 || '';
+        document.getElementById("mode2").textContent = brawler.mode2 || '';
+        document.getElementById("mode3").textContent = brawler.mode3 || '';
+        document.getElementById("buildText").textContent = brawler.buildDesc || '';
+        const skinCount = brawler.skinCount || 0;
+        document.getElementById("skinCountLabel").textContent = pluralizeSkin(skinCount);
+        const skinList = document.getElementById("skinList");
+        const skins = brawler.skinList || [];
+        skinList.innerHTML = skins.map(s => `<span class="shelly-skin-item">${s}</span>`).join('');
+        document.getElementById("opinionText").textContent = brawler.opinion || '';
+        document.getElementById("difficultyText").textContent = (brawler.difficulty !== undefined) ? brawler.difficulty + '/10' : '';
+        document.getElementById("worthText").textContent = brawler.worthUpgrading || '';
+        if (statsCollapsed) {
+            statsCollapsed = false;
+            document.getElementById('statsTableWrap').classList.remove('collapsed');
+            document.getElementById('statsToggleBtn').textContent = 'Свернуть';
         }
+    }
 
-        // ─── УПРОЩЁННАЯ ТАБЛИЦА (без шкал) ───
-        function renderStatsTable(statsStr, recommendedLevel) {
-            const wrap = document.getElementById('statsTableWrap');
-            if (!statsStr || statsStr.trim() === '') {
-                wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Нет данных</div>';
-                return;
-            }
+    function openViewer(id) { location.hash = 'brawler-' + id; }
+    function closeViewer() { location.hash = ''; }
 
-            const lines = statsStr.split('\n').filter(s => s.trim() !== '');
-            if (lines.length === 0) {
-                wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Нет данных</div>';
-                return;
-            }
-
-            const parsed = lines.map(line => {
-                const parts = line.split('-');
-                if (parts.length !== 2) return null;
-                const level = parseInt(parts[0].trim(), 10);
-                const rest = parts[1].trim();
-                const healthMatch = rest.match(/(\d+)\s*здоровья/);
-                const dmgMatch = rest.match(/(\d+)\s*урона/);
-                if (!healthMatch || !dmgMatch) return null;
-                return {
-                    level,
-                    health: parseInt(healthMatch[1], 10),
-                    damage: parseInt(dmgMatch[1], 10)
-                };
-            }).filter(item => item !== null);
-
-            if (parsed.length === 0) {
-                wrap.innerHTML = '<div style="padding:12px;text-align:center;color:#888;">Не удалось распарсить данные</div>';
-                return;
-            }
-
-            let html = `<table class="stats-table">
-                <thead>
-                    <tr>
-                        <th class="col-level">Уровень</th>
-                        <th class="col-health">❤️ Здоровье</th>
-                        <th class="col-damage">⚔️ Урон</th>
-                    </tr>
-                </thead>
-                <tbody>`;
-
-            parsed.forEach((p) => {
-                const isRecommended = (p.level >= recommendedLevel);
-                const isMax = p.level === 11;
-                const rowClass = isRecommended ? 'row-current' : '';
-                let badgeClass = 'level-badge';
-                if (isMax) badgeClass += ' max';
-                else if (isRecommended) badgeClass += ' recommended';
-
-                html += `<tr class="${rowClass}">
-                    <td class="col-level"><span class="${badgeClass}">${p.level}</span></td>
-                    <td class="col-health">${p.health}</td>
-                    <td class="col-damage">${p.damage}</td>
-                </tr>`;
-            });
-
-            html += `</tbody></table>`;
-            wrap.innerHTML = html;
-        }
-
-        // ===== Сворачивание таблицы =====
-        let statsCollapsed = false;
-
-        function toggleStatsTable() {
-            const wrap = document.getElementById('statsTableWrap');
-            const btn = document.getElementById('statsToggleBtn');
-            statsCollapsed = !statsCollapsed;
-            if (statsCollapsed) {
-                wrap.classList.add('collapsed');
-                btn.textContent = 'Развернуть';
-            } else {
-                wrap.classList.remove('collapsed');
-                btn.textContent = 'Свернуть';
-            }
-        }
-
-        // ===== Обновление панели просмотра =====
-        function updateViewerData(brawler) {
-            if (!brawler) return;
-
-            document.getElementById("viewName").textContent = brawler.name;
-            document.getElementById("viewRarity").textContent = brawler.rarity;
-
-            const generalEl = document.getElementById("viewGeneral");
-            generalEl.innerHTML = `
-                ${brawler.name} - <strong>${brawler.rarity}</strong> боец, класса <span class="shelly-class-badge">${brawler.classLabel}</span>.
-                <div class="shelly-sub">Способ получения: ${brawler.generalNote || ''}</div>
-            `;
-
-            const recLevel = brawler.recommendedLevel || 11;
-            // Таблица
-            renderStatsTable(brawler.stats, recLevel);
-            // Рекомендуемый уровень под таблицей
-            document.getElementById("recLevelDisplay").innerHTML = `Рекомендуемый уровень: <strong>${recLevel}</strong>`;
-
-            document.getElementById("viewAttack").textContent = brawler.attackDesc || '';
-            document.getElementById("viewSuper").textContent = brawler.superDesc || '';
-
-            const gadgetSection = document.getElementById('gadgetSection');
-            if (brawler.hasGadget) {
-                gadgetSection.style.display = 'block';
-                document.getElementById('viewGadget').textContent = brawler.gadgetDesc || '';
-            } else {
-                gadgetSection.style.display = 'none';
-            }
-
-            document.getElementById("tipsText").textContent = brawler.tips || '';
-
-            document.getElementById("goodMatchup").innerHTML = enrichMatchups(brawler.goodMatchup || '');
-            document.getElementById("badMatchup").innerHTML = enrichMatchups(brawler.badMatchup || '');
-
-            document.getElementById("mode1").textContent = brawler.mode1 || '';
-            document.getElementById("mode2").textContent = brawler.mode2 || '';
-            document.getElementById("mode3").textContent = brawler.mode3 || '';
-
-            document.getElementById("buildText").textContent = brawler.buildDesc || '';
-
-            const skinCount = brawler.skinCount || 0;
-            document.getElementById("skinCountLabel").textContent = pluralizeSkin(skinCount);
-            const skinList = document.getElementById("skinList");
-            const skins = brawler.skinList || [];
-            skinList.innerHTML = skins.map(s => `<span class="shelly-skin-item">${s}</span>`).join('');
-
-            document.getElementById("opinionText").textContent = brawler.opinion || '';
-            document.getElementById("difficultyText").textContent = (brawler.difficulty !== undefined) ? brawler.difficulty + '/10' : '';
-            document.getElementById("worthText").textContent = brawler.worthUpgrading || '';
-
-            // Сбрасываем свёрнутость таблицы при открытии нового бойца
-            if (statsCollapsed) {
-                statsCollapsed = false;
-                const wrap = document.getElementById('statsTableWrap');
-                const btn = document.getElementById('statsToggleBtn');
-                wrap.classList.remove('collapsed');
-                btn.textContent = 'Свернуть';
-            }
-        }
-
-        // ===== Открыть / закрыть просмотр =====
-        function openViewer(id) {
-            location.hash = 'brawler-' + id;
-        }
-
-        function closeViewer() {
-            location.hash = '';
-        }
-
-        function handleHashChange() {
-            const hash = location.hash;
-            const match = hash.match(/^#brawler-(\d+)$/);
-            const panel = document.getElementById('viewerPanel');
-            const list = document.getElementById('brawlersList');
-
-            if (match) {
-                const id = parseInt(match[1], 10);
-                const brawler = brawlers.find(b => b.id === id);
-                if (brawler) {
-                    if (panel.classList.contains('active')) {
-                        panel.classList.add('closing');
-                        setTimeout(() => {
-                            panel.classList.remove('active', 'closing');
-                            updateViewerData(brawler);
-                            requestAnimationFrame(() => {
-                                panel.classList.add('active');
-                            });
-                            list.style.display = 'none';
-                        }, 300);
-                    } else {
-                        updateViewerData(brawler);
-                        panel.classList.add('active');
-                        list.style.display = 'none';
-                    }
-                } else {
-                    closeViewer();
-                }
-            } else {
+    function handleHashChange() {
+        const hash = location.hash;
+        const match = hash.match(/^#brawler-(\d+)$/);
+        const panel = document.getElementById('viewerPanel');
+        const list = document.getElementById('brawlersList');
+        if (match) {
+            const id = parseInt(match[1], 10);
+            const brawler = brawlers.find(b => b.id === id);
+            if (brawler) {
                 if (panel.classList.contains('active')) {
                     panel.classList.add('closing');
                     setTimeout(() => {
                         panel.classList.remove('active', 'closing');
-                        list.style.display = 'block';
-                        renderBrawlers();
+                        updateViewerData(brawler);
+                        requestAnimationFrame(() => panel.classList.add('active'));
+                        list.style.display = 'none';
                     }, 300);
                 } else {
+                    updateViewerData(brawler);
+                    panel.classList.add('active');
+                    list.style.display = 'none';
+                }
+            } else { closeViewer(); }
+        } else {
+            if (panel.classList.contains('active')) {
+                panel.classList.add('closing');
+                setTimeout(() => {
+                    panel.classList.remove('active', 'closing');
                     list.style.display = 'block';
                     renderBrawlers();
-                }
+                }, 300);
+            } else {
+                list.style.display = 'block';
+                renderBrawlers();
             }
         }
+    }
 
-        //  КАЛЬКУЛЯТОР
-        function calculate() {
-            const hp = +document.getElementById("hp").value;
-            const dmg = +document.getElementById("dmg").value;
-            const lvl = +document.getElementById("lvl").value;
-            const result = document.getElementById("result");
+    // Калькулятор
+    function calculate() {
+        const hp = +document.getElementById("hp").value;
+        const dmg = +document.getElementById("dmg").value;
+        const lvl = +document.getElementById("lvl").value;
+        const result = document.getElementById("result");
+        const copyBtn = document.getElementById("copyBtn");
+        if (!hp || !dmg || lvl < 1 || lvl > 11) {
+            result.innerHTML = "Введите корректные данные";
+            copyBtn.style.display = "none";
+            return;
+        }
+        const multCurrent = 0.5 + (lvl - 1) * 0.05;
+        const hp11 = hp / multCurrent;
+        const dmg11 = dmg / multCurrent;
+        let html = "";
+        for (let i = 1; i <= 11; i++) {
+            const mult = 0.5 + (i - 1) * 0.05;
+            const h = Math.round(hp11 * mult);
+            const d = Math.round(dmg11 * mult);
+            const cls = i === lvl ? "line highlight" : "line";
+            html += `<span class="${cls}">${i} - ${h} здоровья / ${d} урона</span>`;
+        }
+        result.innerHTML = html;
+        copyBtn.style.display = "block";
+    }
+
+    function copyResult() {
+        const text = document.getElementById("result").innerText;
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+            document.execCommand("copy");
             const copyBtn = document.getElementById("copyBtn");
+            copyBtn.textContent = "Результат скопирован!";
+            copyBtn.classList.add("copy-success");
+            setTimeout(() => {
+                copyBtn.textContent = "Скопировать результат";
+                copyBtn.classList.remove("copy-success");
+            }, 1000);
+        } catch (e) { alert("Не удалось скопировать"); }
+        document.body.removeChild(textarea);
+    }
 
-            if (!hp || !dmg || lvl < 1 || lvl > 11) {
-                result.innerHTML = "Введите корректные данные";
-                copyBtn.style.display = "none";
-                return;
-            }
-
-            const multCurrent = 0.5 + (lvl - 1) * 0.05;
-            const hp11 = hp / multCurrent;
-            const dmg11 = dmg / multCurrent;
-
-            let html = "";
-            for (let i = 1; i <= 11; i++) {
-                const mult = 0.5 + (i - 1) * 0.05;
-                const h = Math.round(hp11 * mult);
-                const d = Math.round(dmg11 * mult);
-                const cls = i === lvl ? "line highlight" : "line";
-                html += `<span class="${cls}">${i} - ${h} здоровья / ${d} урона</span>`;
-            }
-            result.innerHTML = html;
-            copyBtn.style.display = "block";
-        }
-
-        function copyResult() {
-            const text = document.getElementById("result").innerText;
-            const textarea = document.createElement("textarea");
-            textarea.value = text;
-            textarea.style.position = "fixed";
-            textarea.style.opacity = "0";
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-
-            try {
-                document.execCommand("copy");
-                const copyBtn = document.getElementById("copyBtn");
-                copyBtn.textContent = "Результат скопирован!";
-                copyBtn.classList.add("copy-success");
+    // Копирование промокода
+    function copyPromoCode(code, btnElement) {
+        if (!btnElement) return;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(() => {
+                btnElement.textContent = 'Скопировано!';
+                btnElement.classList.add('copied');
                 setTimeout(() => {
-                    copyBtn.textContent = "Скопировать результат";
-                    copyBtn.classList.remove("copy-success");
-                }, 1000);
-            } catch (e) {
-                alert("Не удалось скопировать");
-            }
-            document.body.removeChild(textarea);
-        }
-
-        // ===== Слушатели =====
-        document.getElementById('searchInput').addEventListener('input', renderBrawlers);
-        document.getElementById('sortSelect').addEventListener('change', renderBrawlers);
-        document.getElementById('filterGadget').addEventListener('change', function() {
-            filters.gadget = this.value;
-            renderBrawlers();
-        });
-        document.getElementById('filterWorth').addEventListener('change', function() {
-            filters.worth = this.value;
-            renderBrawlers();
-        });
-
-        // ===== Вкладки =====
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                const tabId = this.dataset.tab;
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                document.getElementById(tabId).classList.add('active');
-                if (tabId === 'tab2') {
-                    handleHashChange();
-                }
+                    btnElement.textContent = 'Копировать';
+                    btnElement.classList.remove('copied');
+                }, 1500);
+            }).catch(() => {
+                fallbackCopy(code, btnElement);
             });
+        } else {
+            fallbackCopy(code, btnElement);
+        }
+    }
+
+    function fallbackCopy(text, btnElement) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            btnElement.textContent = 'Скопировано!';
+            btnElement.classList.add('copied');
+            setTimeout(() => {
+                btnElement.textContent = 'Копировать';
+                btnElement.classList.remove('copied');
+            }, 1500);
+        } catch (e) {
+            alert('Не удалось скопировать');
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Отображение промокодов (только активные)
+    function renderPromocodes() {
+        const list = document.getElementById('promoList');
+        const today = new Date().toISOString().slice(0, 10);
+        const active = promoCodes.filter(p => p.expiry >= today);
+        if (!active.length) {
+            list.innerHTML = '<div class="empty-state">Нет активных промокодов</div>';
+            return;
+        }
+        list.innerHTML = active.map(p => {
+            const descHtml = p.description ? `<span class="promo-desc">- на ${escapeHtml(p.description)}</span>` : '';
+            return `
+            <div class="promo-item">
+                <span class="promo-code">${escapeHtml(p.code)}</span>
+                ${descHtml}
+                <span class="promo-expiry">Срок: ${p.expiry}</span>
+                <button class="copy-promo-btn" onclick="copyPromoCode('${escapeHtml(p.code)}', this)">Копировать</button>
+            </div>
+        `}).join('');
+    }
+
+    // ---------- ВКЛАДКИ ----------
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const tabId = this.dataset.tab;
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if (tabId === 'tab2') handleHashChange();
+            if (tabId === 'tab4') renderPromocodes();
         });
+    });
 
-        window.addEventListener('hashchange', handleHashChange);
-
-        window.addEventListener('load', function() {
-            if (location.hash.startsWith('#brawler-')) {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelector('[data-tab="tab2"]').classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                document.getElementById('tab2').classList.add('active');
-            }
-            handleHashChange();
-        });
-
+    // ---------- СОБЫТИЯ ----------
+    document.getElementById('searchInput').addEventListener('input', renderBrawlers);
+    document.getElementById('sortSelect').addEventListener('change', renderBrawlers);
+    document.getElementById('filterGadget').addEventListener('change', function() {
+        filters.gadget = this.value;
         renderBrawlers();
-    </script>
+    });
+    document.getElementById('filterWorth').addEventListener('change', function() {
+        filters.worth = this.value;
+        renderBrawlers();
+    });
+    document.getElementById('filterClass').addEventListener('change', function() {
+        filters.class = this.value;
+        renderBrawlers();
+    });
 
+    window.addEventListener('hashchange', handleHashChange);
+
+    window.addEventListener('load', function() {
+        if (location.hash.startsWith('#brawler-')) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('[data-tab="tab2"]').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab2').classList.add('active');
+        }
+        handleHashChange();
+        renderBrawlers();
+        renderPromocodes();
+    });
+</script>
 </body>
 </html>
